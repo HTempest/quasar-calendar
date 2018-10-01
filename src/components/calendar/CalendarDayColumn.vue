@@ -248,6 +248,7 @@
     .calendar-day-event-overlap-first
       margin-left 0
     .current-time-line
+      z-index: 20
       position absolute
       border 1px solid red
       width 100%
