@@ -14,6 +14,9 @@
       <span v-else class="calendar-event-summary">
         {{ eventObject.summary }}
       </span>
+       <q-chip class="float-right" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+          {{ eventObject.attendees.length }}
+        </q-chip>
     </template>
     <template v-else>
       &nbsp;
@@ -24,7 +27,8 @@
 <script>
   import {
     QBtn,
-    QTooltip
+    QTooltip,
+    QChip
   } from 'quasar'
   import CalendarMixin from './mixins/CalendarMixin'
   import CalendarEventMixin from './mixins/CalendarEventMixin'
@@ -73,15 +77,30 @@
         default: false
       }
     },
+    data() {
+      return {
+        userPhotographerId: 0
+      }
+    },
     components: {
       QBtn,
-      QTooltip
+      QTooltip,
+      QChip
     },
     mixins: [CalendarMixin, CalendarEventMixin],
     data () {
       return {}
     },
     computed: {
+      getPhotographerCountColor () {
+        const attendees = this.eventObject.attendees
+        const photographerId = this.$userProfileData.photographerId
+        let colour = 'info'
+        if (Array.isArray(attendees) && photographerId) {
+          colour = attendees.some(a => a.id == photographerId) ? 'positive': 'info'
+        }
+        return colour
+      }
     },
     methods: {
       getEventStyle () {
