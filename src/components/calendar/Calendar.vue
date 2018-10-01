@@ -207,7 +207,7 @@
       },
       switchToSingleDay: function (params) {
         this.setTimePeriod(params)
-        this.$refs.fullCalendarTabs.selectTab('tab-week-component')
+        this.$refs.fullCalendarTabs.selectTab('tab-single-day-component')
       },
       doUpdate: function () {
         this.mountSetDate()
@@ -236,10 +236,9 @@
   .calendar-tabs
     .calendar-tab-pane-day,
     .calendar-tab-pane-week
-      height 60vh
-      max-height 60vh
+      height 85vh
+      // max-height 60vh
       overflow hidden
     .q-tab-pane
       border none
-
 </style>
