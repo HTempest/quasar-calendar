@@ -84,13 +84,13 @@
     computed: {
     },
     methods: {
-      getEventStyle: function () {
+      getEventStyle () {
         return {
           // 'background-color': this.backgroundColor,
           // 'color': this.textColor
         }
       },
-      getEventClass: function () {
+      getEventClass () {
         return this.addCssColorClasses(
           {
             'calendar-event': true,
@@ -106,10 +106,10 @@
           this.eventObject
         )
       },
-      isEmptySlot: function () {
+      isEmptySlot () {
         return this.eventObject.start.isEmptySlot
       },
-      eventContinuesNextWeek: function () {
+      eventContinuesNextWeek () {
         return (
           dashHas(this.eventObject, 'start.dateObject') &&
           this.monthStyle &&
@@ -117,7 +117,7 @@
           (this.lastDayOfWeek || this.isLastDayOfMonth(this.eventObject.start.dateObject))
         )
       },
-      eventContinuesFromLastWeek: function () {
+      eventContinuesFromLastWeek () {
         return (
           dashHas(this.eventObject, 'start.dateObject') &&
           this.monthStyle &&
@@ -125,31 +125,31 @@
           (this.firstDayOfWeek || this.isFirstDayOfMonth(this.eventObject.start.dateObject))
         )
       },
-      isLastDayOfMonth: function (dateObject) {
+      isLastDayOfMonth (dateObject) {
         if (typeof dateObject === 'undefined' || dateObject === null) {
           return false
         }
         return this.makeDT(this.currentCalendarDay).toISODate() === this.makeDT(dateObject).endOf('month').toISODate()
       },
-      isFirstDayOfMonth: function (dateObject) {
+      isFirstDayOfMonth (dateObject) {
         if (typeof dateObject === 'undefined' || dateObject === null) {
           return false
         }
         return this.makeDT(this.currentCalendarDay).toISODate() === this.makeDT(dateObject).startOf('month').toISODate()
       },
-      eventHasNextDay: function () {
+      eventHasNextDay () {
         if (this.hasNextDay) {
           return this.hasNextDay
         }
         return false
       },
-      eventHasPreviousDay: function () {
+      eventHasPreviousDay () {
         if (this.hasPreviousDay) {
           return this.hasPreviousDay
         }
         return false
       },
-      formatTime: function (startTime) {
+      formatTime (startTime) {
         let returnString = this.makeDT(startTime).toLocaleString(DateTime.TIME_SIMPLE)
         // simplify if AM / PM present
         if (returnString.includes('M')) {
@@ -159,16 +159,15 @@
         }
         return returnString
       },
-      isAllDayEvent: function () {
+      isAllDayEvent () {
         return this.eventObject.start.isAllDay
       },
-      handleClick: function (e) {
+      handleClick (e) {
         this.eventObject.allowEditing = this.allowEditing
         this.$emit('click', this.eventObject)
         this.triggerEventClick(this.eventObject, this.eventRef)
       }
-    },
-    mounted () {}
+    }
   }
 </script>
 
