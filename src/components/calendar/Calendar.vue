@@ -15,12 +15,6 @@
         slot="title"
       />
       <q-tab
-        name="tab-days-component"
-        icon="view_column"
-        :label="tabLabels.threeDay"
-        slot="title"
-      />
-      <q-tab
         name="tab-single-day-component"
         icon="view_day"
         :label="tabLabels.day"
@@ -213,7 +207,7 @@
       },
       switchToSingleDay: function (params) {
         this.setTimePeriod(params)
-        this.$refs.fullCalendarTabs.selectTab('tab-single-day-component')
+        this.$refs.fullCalendarTabs.selectTab('tab-week-component')
       },
       doUpdate: function () {
         this.mountSetDate()
