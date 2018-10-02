@@ -46,7 +46,7 @@
             icon="edit"
             :color="getEventColor(eventObject, 'color')"
             :text-color="getEventColor(eventObject, 'textColor')"
-            @click="startEditMode"
+            @click="$root.$emit('openBookingForm', eventObject.id);__close()"
           />
         </div>
 
@@ -227,34 +227,28 @@
           <q-item-main class="ced-list-title">
 
             <q-item-tile>
-              {{ countAttendees }} Photographers<template v-if="countAttendees > 1">s</template>
+              {{ countAttendees }} Photographer<template v-if="countAttendees > 1">s</template>
             </q-item-tile>
 
-            <!-- guest list -->
-            <q-item-tile>
-              <q-item
+            <q-item-tile
+              v-for="(photographer, index) in eventObject.attendees"
+              :key="`pgr_${index}`"
+            >
+              <q-chip
+                class="q-pa-xs q-mb-xs"
                 dense
-                v-for="thisAttendee in eventObject.attendees"
-                :key="thisAttendee.id"
-                v-if="!thisAttendee.resource"
-                class="ced-nested-item"
+                square
+                @click.native="$router.push(`/photographers/${photographer.id}`)"
               >
-                <q-item-side
-                  inverted
-                  icon="person"
-                  class="ced-small-inverted-icon"
-                />
-                <q-item-main class="ced-list-title">
-                  <template v-if="thisAttendee.displayName && thisAttendee.displayName.length > 0">
-                    {{ thisAttendee.displayName }}
-                  </template>
-                  <template v-else>
-                    {{ thisAttendee.email }}
-                  </template>
-                </q-item-main>
-              </q-item>
+                {{photographer.displayName}}
+              </q-chip>
+              <q-icon
+                class="q-ml-xs q-mb-xs"
+                :color="statusColor(photographer.status)"
+                :name="statusIcon(photographer.status)"
+                size="1.2em"
+              />
             </q-item-tile>
-
           </q-item-main>
         </q-item>
 
@@ -449,6 +443,22 @@
 
     },
     methods: {
+      statusColor (status = '') {
+        status = status.toLowerCase()
+        return (status === 'confirmed')
+          ? 'secondary'
+          : (status === 'queried')
+            ? 'query'
+            : 'primary'
+      },
+      statusIcon (status = '') {
+        status = status.toLowerCase()
+        return (status === 'confirmed')
+          ? 'check_circle'
+          : (status === 'queried')
+            ? 'help'
+            : 'info'
+      },
       textExists: function (fieldLocation) {
         return (
           dashHas(this.eventObject, fieldLocation) &&
@@ -525,7 +535,8 @@
   $listSideItemWidth = 38px
   $listSideItemSpace = 10px
   $forcedLeftMargin = $topSidePadding + $listSideItemWidth + $listSideItemSpace
-
+  .modal-content
+    width: 40%
   .calendar-event-detail
     .ced-list-title
       font-size 1em
