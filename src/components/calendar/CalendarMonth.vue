@@ -81,8 +81,8 @@
                   :allow-editing="allowEditing"
                 />
               </div>
-              <div class="event-overflow-ellipsis text-center" v-if="monthGetDateEvents(thisDay.dateObject)[1].length > 0">
-                &bull;&bull;&bull; {{ monthGetDateEvents(thisDay.dateObject)[1].length }} 
+              <div class="text-center" v-if="monthGetDateEvents(thisDay.dateObject)[1].length > 0">
+                And <span class="event-overflow-qty">{{ monthGetDateEvents(thisDay.dateObject)[1].length }}</span> more <span class="event-overflow-ellipsis">...</span>
               </div>
             </template>
           </div>
@@ -268,8 +268,11 @@
 <style lang="stylus">
   @import 'calendar.vars.styl'
   .event-overflow-ellipsis
-    font-weight 1000
-    letter-spacing 0.5em
+    font-weight 750
+    letter-spacing 0.1em
+    
+  .event-overflow-qty
+    font-weight 750
 
   .calendar-month
 
