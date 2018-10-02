@@ -46,8 +46,19 @@
             icon="edit"
             :color="getEventColor(eventObject, 'color')"
             :text-color="getEventColor(eventObject, 'textColor')"
+            :disabled="!isUserAccount"
             @click="$root.$emit('openBookingForm', eventObject.id);__close()"
           />
+          <q-tooltip
+            class="q-caption"
+            anchor="bottom right"
+            self="top right"
+            :delay=300
+            v-if="!isUserAccount"
+          >
+            You can only edit bookings for your own accounts
+          </q-tooltip>
+
         </div>
 
       </div>
@@ -385,7 +396,20 @@
         endTimeObject: new Date()
       }
     },
+    firestore () {
+      return {
+        accounts: this.$userProfile.collection('accounts'),
+        profile: this.$userProfile
+      }
+    },
     computed: {
+      isUserAccount () {
+        if (typeof this.eventObject.summary === "undefined") return false
+        return this.accounts.filter(acc => {
+          console.log("PING!")
+          return acc.name === this.eventObject.summary
+        }).length > 0
+      },
       countAttendees: function () {
         if (!dashHas(this.eventObject, 'attendees')) {
           return 0
