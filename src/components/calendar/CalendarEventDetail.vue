@@ -15,23 +15,7 @@
         />
       </div>
       <div
-        v-if="isEditingAllowed && inEditMode"
-        class="ced-top-title"
-      >
-        <div
-          v-if="isEditingAllowed && inEditMode"
-          class="ced-toolbar-edit-spacer">
-        </div>
-        <q-input
-          v-model="editEventObject.summary"
-          float-label="Summary"
-          inverted-light
-          :color="fieldColor"
-          class="no-shadow"
-        />
-      </div>
-      <div
-        v-else-if="eventObject.summary"
+        v-if="eventObject.summary"
         class="ced-top-title"
       >
         {{ eventObject.summary }}
@@ -47,8 +31,9 @@
             :color="getEventColor(eventObject, 'color')"
             :text-color="getEventColor(eventObject, 'textColor')"
             :disabled="!isUserAccount"
-            @click="$root.$emit('openBookingForm', eventObject.id);__close()"
+            @click="startEditMode"
           />
+          <!-- @click="$root.$emit('openBookingForm', eventObject.id);__close()" -->
           <q-tooltip
             class="q-caption"
             anchor="bottom right"
@@ -78,79 +63,8 @@
             <q-item-tile icon="access_time"/>
           </q-item-side>
 
-          <!-- edit mode -->
-          <q-item-main v-if="isEditingAllowed && inEditMode">
-
-            <div class="row items-center gutter-xs">
-              <div>
-                <q-field>
-                  <q-datetime
-                    v-model="startDateObject"
-                    type="date"
-                    inverted-light
-                    :color="fieldColor"
-                    class="no-shadow"
-                    format="MMM D, YYYY"
-                  />
-                </q-field>
-
-              </div>
-
-              <div v-if="!editEventObject.start.isAllDay">
-                <q-field>
-                  <q-datetime
-                    v-model="startTimeObject"
-                    type="time"
-                    inverted-light
-                    :color="fieldColor"
-                    class="no-shadow"
-                  />
-                </q-field>
-
-              </div>
-              <div>to</div>
-              <div>
-                <q-field>
-                  <q-datetime
-                    v-model="endDateObject"
-                    type="date"
-                    inverted-light
-                    :color="fieldColor"
-                    class="no-shadow"
-                    format="MMM D, YYYY"
-                  />
-                </q-field>
-
-              </div>
-
-              <div v-if="!editEventObject.start.isAllDay">
-                <q-field>
-                  <q-datetime
-                    v-model="endTimeObject"
-                    type="time"
-                    inverted-light
-                    :color="fieldColor"
-                    class="no-shadow"
-                  />
-                </q-field>
-
-              </div>
-
-            </div>
-
-            <!-- all-day -->
-            <q-field>
-              <q-checkbox
-                label="All day"
-                v-model="editEventObject.start.isAllDay"
-                :toggle-indeterminate="false"
-              />
-            </q-field>
-
-          </q-item-main>
-
           <!-- display mode -->
-          <q-item-main v-else>
+          <q-item-main>
             <div
               v-if="eventObject.start && eventObject.start.dateObject"
               class="ced-list-title"
@@ -181,24 +95,7 @@
         </q-item>
 
         <!-- location -->
-        <q-item v-if="isEditingAllowed && inEditMode" multiline>
-          <q-item-side>
-            <q-item-tile icon="location_on"/>
-          </q-item-side>
-          <q-item-main class="ced-list-title">
-            <q-field>
-              <q-input
-                v-model="editEventObject.location"
-                float-label="Location"
-                inverted-light
-                :color="fieldColor"
-                class="no-shadow"
-              />
-            </q-field>
-
-          </q-item-main>
-        </q-item>
-        <q-item v-else-if="textExists('location')">
+        <q-item v-if="textExists('location')">
           <q-item-side>
             <q-item-tile icon="location_on"/>
           </q-item-side>
@@ -264,7 +161,7 @@
         </q-item>
 
         <!-- description -->
-        <q-item v-if="isEditingAllowed && inEditMode">
+        <!-- <q-item v-if="isEditingAllowed && inEditMode">
           <q-item-side>
             <q-item-tile icon="format_align_left"/>
           </q-item-side>
@@ -280,9 +177,9 @@
             </q-field>
 
           </q-item-main>
-        </q-item>
+        </q-item> -->
         <q-item
-          v-else-if="textExists('description')"
+          v-if="textExists('description')"
           multiline
         >
           <q-item-side>
@@ -294,30 +191,6 @@
         </q-item>
 
       </q-list>
-    </div>
-
-    <!-- editing close buttons -->
-    <div
-      v-if="isEditingAllowed && inEditMode"
-      class="row justify-end q-pa-md gutter-sm"
-    >
-      <div>
-        <q-btn
-          color="warning"
-          icon="cancel"
-          label="Cancel"
-          @click="__close()"
-        />
-      </div>
-      <div>
-        <q-btn
-          color="positive"
-          icon="check"
-          label="Save"
-          @click="__save()"
-        />
-      </div>
-
     </div>
 
   </q-modal>
@@ -406,7 +279,6 @@
       isUserAccount () {
         if (typeof this.eventObject.summary === "undefined") return false
         return this.accounts.filter(acc => {
-          console.log("PING!")
           return acc.name === this.eventObject.summary
         }).length > 0
       },
