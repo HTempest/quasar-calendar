@@ -236,7 +236,7 @@
   .calendar-tabs
     .calendar-tab-pane-day,
     .calendar-tab-pane-week
-      height 85vh
+      height calc(100vh - 134px - 24px)
       // max-height 60vh
       overflow hidden
     .q-tab-pane
