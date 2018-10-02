@@ -64,26 +64,17 @@
           </div>
           <div class="calendar-day-content">
             <template v-if="hasAnyEvents(thisDay.dateObject)">
-              <div
-                v-for="thisEvent in monthGetDateEvents(thisDay.dateObject)[0]"
-                :key="thisEvent.id"
-              >
-                <calendar-event
-                  :event-object="thisEvent"
-                  :month-style="true"
-                  :event-ref="eventRef"
-                  :prevent-event-detail="preventEventDetail"
-                  :current-calendar-day="thisDay.dateObject"
-                  :has-previous-day="thisEvent.hasPrev"
-                  :has-next-day="thisEvent.hasNext"
-                  :first-day-of-week="(weekDayIndex === 0)"
-                  :last-day-of-week="(weekDayIndex === (thisWeek.length -1))"
-                  :allow-editing="allowEditing"
-                />
-              </div>
-              <div class="event-overflow-ellipsis text-center" v-if="monthGetDateEvents(thisDay.dateObject)[1].length > 0">
-                &bull;&bull;&bull; {{ monthGetDateEvents(thisDay.dateObject)[1].length }} 
-              </div>
+              <calendar-month-day
+                :month-style="true"
+                :event-ref="eventRef"
+                :prevent-event-detail="preventEventDetail"
+                :current-calendar-day="thisDay.dateObject"
+                :first-day-of-week="(weekDayIndex === 0)"
+                :last-day-of-week="(weekDayIndex === (thisWeek.length -1))"
+                :allow-editing="allowEditing"
+                :this-day="thisDay"
+                :max-visible-events="maxEvents"
+              />
             </template>
           </div>
         </div>
@@ -120,12 +111,14 @@
   import CalendarDayLabels from './CalendarDayLabels'
   import CalendarHeaderNav from './CalendarHeaderNav'
   import CalendarEventDetail from './CalendarEventDetail'
+  import CalendarMonthDay from './CalendarMonthDay'
   const { DateTime } = require('luxon')
   export default {
     name: 'CalendarMonth',
     components: {
       QuantityBubble,
       CalendarEvent,
+      CalendarMonthDay,
       CalendarDayLabels,
       CalendarHeaderNav,
       CalendarEventDetail,
@@ -158,10 +151,12 @@
     methods: {
       monthGetDateEvents: function (dateObject) {
         const events = this.dateGetEvents(dateObject)
-        return [
+        var a = [
           events.slice(0, this.maxEvents),
           events.slice(this.maxEvents)
         ]
+        console.log(a);
+        return a;
       },
       doUpdate: function () {
         this.mountSetDate()
@@ -267,9 +262,6 @@
 
 <style lang="stylus">
   @import 'calendar.vars.styl'
-  .event-overflow-ellipsis
-    font-weight 1000
-    letter-spacing 0.5em
 
   .calendar-month
 
