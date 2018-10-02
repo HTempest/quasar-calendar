@@ -65,7 +65,7 @@
           <div class="calendar-day-content">
             <template v-if="hasAnyEvents(thisDay.dateObject)">
               <div
-                v-for="thisEvent in monthGetDateEvents(thisDay.dateObject)"
+                v-for="thisEvent in monthGetDateEvents(thisDay.dateObject)[0]"
                 :key="thisEvent.id"
               >
                 <calendar-event
@@ -81,8 +81,8 @@
                   :allow-editing="allowEditing"
                 />
               </div>
-              <div class="event-overflow-ellipsis text-center" v-if="monthGetDateEvents(thisDay.dateObject).length >= maxEvents">
-                &bull;&bull;&bull;
+              <div class="event-overflow-ellipsis text-center" v-if="monthGetDateEvents(thisDay.dateObject)[1].length > 0">
+                &bull;&bull;&bull; {{ monthGetDateEvents(thisDay.dateObject)[1].length }} 
               </div>
             </template>
           </div>
@@ -157,7 +157,11 @@
     },
     methods: {
       monthGetDateEvents: function (dateObject) {
-        return this.dateGetEvents(dateObject).slice(0, this.maxEvents)
+        const events = this.dateGetEvents(dateObject)
+        return [
+          events.slice(0, this.maxEvents),
+          events.slice(this.maxEvents)
+        ]
       },
       doUpdate: function () {
         this.mountSetDate()
