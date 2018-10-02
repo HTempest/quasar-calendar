@@ -36,6 +36,10 @@ export default {
     allowEditing: {
       type: Boolean,
       default: false
+    },
+    maxEvents: {
+      type: Number,
+      default: 5
     }
   },
   mounted () {}

@@ -39,6 +39,7 @@
           }"
           v-for="(thisDay, weekDayIndex) in thisWeek"
           :key="makeDT(thisDay.dateObject).toISODate()"
+          @click="handleDayClick(thisDay.dateObject)"
         >
           <div
             v-if="isCurrentDate(thisDay.dateObject)"
@@ -46,7 +47,6 @@
               'calendar-day-number': true,
               'cursor-pointer': calendarDaysAreClickable
             }"
-            @click="handleDayClick(thisDay.dateObject)"
           >
             <quantity-bubble
               :quantity="thisDay.dateObject.day"
@@ -59,7 +59,6 @@
               'calendar-day-number': true,
               'cursor-pointer': calendarDaysAreClickable
             }"
-            @click="handleDayClick(thisDay.dateObject)"
           >
             {{ thisDay.dateObject.day }}
           </div>
@@ -81,6 +80,9 @@
                   :last-day-of-week="(weekDayIndex === (thisWeek.length -1))"
                   :allow-editing="allowEditing"
                 />
+              </div>
+              <div class="event-overflow-ellipsis text-center" v-if="monthGetDateEvents(thisDay.dateObject).length >= maxEvents">
+                &bull;&bull;&bull;
               </div>
             </template>
           </div>
@@ -155,7 +157,7 @@
     },
     methods: {
       monthGetDateEvents: function (dateObject) {
-        return this.dateGetEvents(dateObject)
+        return this.dateGetEvents(dateObject).slice(0, this.maxEvents)
       },
       doUpdate: function () {
         this.mountSetDate()
@@ -261,6 +263,9 @@
 
 <style lang="stylus">
   @import 'calendar.vars.styl'
+  .event-overflow-ellipsis
+    font-weight 1000
+    letter-spacing 0.5em
 
   .calendar-month
 

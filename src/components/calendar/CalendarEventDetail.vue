@@ -227,7 +227,7 @@
           <q-item-main class="ced-list-title">
 
             <q-item-tile>
-              {{ countAttendees }} guest<template v-if="countAttendees > 1">s</template>
+              {{ countAttendees }} Photographers<template v-if="countAttendees > 1">s</template>
             </q-item-tile>
 
             <!-- guest list -->
