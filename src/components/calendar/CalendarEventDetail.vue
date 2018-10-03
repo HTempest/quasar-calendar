@@ -148,6 +148,7 @@
                 square
                 @click.native="$router.push(`/photographers/${photographer.id}`)"
               >
+                <t-user-profile-image :userId="photographer.id.toString()" :showName="false"/>
                 {{photographer.displayName}}
               </q-chip>
               <q-icon
@@ -231,6 +232,7 @@
     QInput
   } from 'quasar'
   import CalendarMixin from './mixins/CalendarMixin'
+  import TUserProfileImage from 'components/TUserProfileImage'
   const { DateTime } = require('luxon')
   // const timeAgo = require('node-time-ago')
   export default {
@@ -273,7 +275,8 @@
       QField,
       QCheckbox,
       QDatetime,
-      QInput
+      QInput,
+      TUserProfileImage
     },
     mixins: [CalendarMixin],
     data () {
