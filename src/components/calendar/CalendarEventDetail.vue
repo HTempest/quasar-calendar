@@ -201,7 +201,7 @@
             >
               <q-item-main :label="note.photographerName" :sublabel="note.message" />
               <q-item-side>
-                <q-item-tile stamp>{{moment(note.created).fromNow()}}</q-item-tile>
+                <!-- <q-item-tile stamp>{{timeAgo(note.created)}}</q-item-tile> -->
               </q-item-side>
             </q-item>
           </q-item-main>
@@ -232,7 +232,7 @@
   } from 'quasar'
   import CalendarMixin from './mixins/CalendarMixin'
   const { DateTime } = require('luxon')
-  import * as moment from 'moment'
+  const { timeAgo } = require('time-ago')
   export default {
     name: 'CalendarEventDetail',
     props: {
