@@ -1,34 +1,43 @@
 {
-  "name": "quasar-calendar",
-  "version": "0.3.1",
-  "description": "A full display calendar for the Quasar vue.js framework",
-  "keywords": [
-    "vue",
-    "quasar",
-    "quasar-framework",
-    "calendar"
+  "_args": [
+    [
+      "git+https://github.com/HTempest/quasar-calendar.git#tempest",
+      "/Users/jacob/Documents/Prospero/bookings.tempestapps.io"
+    ]
   ],
-  "bugs": "https://github.com/stormseed/quasar-calendar/issues",
-  "repository": {
+  "_from": "git+https://github.com/HTempest/quasar-calendar.git#tempest",
+  "_id": "quasar-calendar@git+https://github.com/HTempest/quasar-calendar.git#674e6cde279e30d23f5fb5dc1477a43e85318ce9",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/quasar-calendar",
+  "_phantomChildren": {},
+  "_requested": {
     "type": "git",
-    "url": "https://github.com/stormseed/quasar-calendar.git"
+    "raw": "git+https://github.com/HTempest/quasar-calendar.git#tempest",
+    "rawSpec": "git+https://github.com/HTempest/quasar-calendar.git#tempest",
+    "saveSpec": "git+https://github.com/HTempest/quasar-calendar.git#tempest",
+    "fetchSpec": "https://github.com/HTempest/quasar-calendar.git",
+    "gitCommittish": "tempest"
   },
-  "homepage": "https://github.com/stormseed/quasar-calendar",
-  "author": "Chris Benjamin <cbenjamin@stormseed.com>",
-  "license": "MIT",
-  "main": "src/index.js",
-  "files": [
-    "src/index.js",
-    "src/**/*js",
-    "src/**/*vue",
-    "src/**/*styl",
-    "package.json"
+  "_requiredBy": [
+    "/"
   ],
+  "_resolved": "git+https://github.com/HTempest/quasar-calendar.git#674e6cde279e30d23f5fb5dc1477a43e85318ce9",
+  "_spec": "git+https://github.com/HTempest/quasar-calendar.git#tempest",
+  "_where": "/Users/jacob/Documents/Prospero/bookings.tempestapps.io",
+  "author": {
+    "name": "Chris Benjamin",
+    "email": "cbenjamin@stormseed.com"
+  },
+  "bugs": {
+    "url": "https://github.com/stormseed/quasar-calendar/issues"
+  },
   "dependencies": {
     "lodash.has": "^4.5.2",
     "luxon": "^1.3.3",
     "time-ago": "^0.2.1"
   },
+  "description": "A full display calendar for the Quasar vue.js framework",
   "devDependencies": {
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
@@ -43,7 +52,29 @@
     "eslint-plugin-vue": "^4.5.0",
     "quasar-cli": "^0.17.19"
   },
+  "files": [
+    "src/index.js",
+    "src/**/*js",
+    "src/**/*vue",
+    "src/**/*styl",
+    "package.json"
+  ],
+  "homepage": "https://github.com/stormseed/quasar-calendar",
+  "keywords": [
+    "vue",
+    "quasar",
+    "quasar-framework",
+    "calendar"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "name": "quasar-calendar",
   "peerDependencies": {
     "quasar-framework": "^0.17.16"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stormseed/quasar-calendar.git"
+  },
+  "version": "0.3.1"
 }

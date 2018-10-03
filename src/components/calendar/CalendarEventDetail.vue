@@ -201,7 +201,7 @@
             >
               <q-item-main :label="note.photographerName" :sublabel="note.message" />
               <q-item-side>
-                <!-- <q-item-tile stamp>{{timeAgo(note.created)}}</q-item-tile> -->
+                <q-item-tile stamp>{{timeAgo(note.created)}}</q-item-tile>
               </q-item-side>
             </q-item>
           </q-item-main>
