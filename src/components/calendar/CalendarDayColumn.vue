@@ -6,6 +6,7 @@
       :key="thisHour"
       :style="getCellStyle"
       :id="makeDT(workingDate).toISODate() + '-hour-' + (thisHour - 1)"
+      @click="hourClick"
     >
       <div class="calendar-day-time-content"></div>
     </div>
@@ -121,6 +122,9 @@
       }
     },
     methods: {
+      hourClick: function () {
+        this.$root.$emit('openBookingForm')
+      },
       calculateDayEventClass: function (thisEvent) {
         let classes = {}
         if (thisEvent.numberOfOverlaps > 0) {
