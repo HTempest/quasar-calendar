@@ -201,7 +201,7 @@
             >
               <q-item-main :label="note.photographerName" :sublabel="note.message" />
               <q-item-side>
-                <q-item-tile stamp>{{timeAgo(note.created)}}</q-item-tile>
+                <q-item-tile stamp>{{getTimeAgo(note.created)}}</q-item-tile>
               </q-item-side>
             </q-item>
           </q-item-main>
@@ -232,7 +232,7 @@
   } from 'quasar'
   import CalendarMixin from './mixins/CalendarMixin'
   const { DateTime } = require('luxon')
-  const { timeAgo } = require('time-ago')
+  const timeAgo = require('node-time-ago')
   export default {
     name: 'CalendarEventDetail',
     props: {
@@ -259,11 +259,6 @@
       fieldColor: {
         type: String,
         default: 'grey-2'
-      }
-    },
-    data () {
-      return {
-        moment: moment
       }
     },
     components: {
@@ -362,6 +357,9 @@
 
     },
     methods: {
+      getTimeAgo (time) {
+        return timeAgo(time)
+      },
       statusColor (status = '') {
         status = status.toLowerCase()
         return (status === 'confirmed')
