@@ -31,9 +31,9 @@
             :color="getEventColor(eventObject, 'color')"
             :text-color="getEventColor(eventObject, 'textColor')"
             :disabled="!isUserAccount"
-            @click="startEditMode"
+            @click="$root.$emit('openBookingForm', eventObject.id);__close()"
           />
-          <!-- @click="$root.$emit('openBookingForm', eventObject.id);__close()" -->
+          <!-- @click="startEditMode" -->
           <q-tooltip
             class="q-caption"
             anchor="bottom right"
@@ -159,34 +159,51 @@
             </q-item-tile>
           </q-item-main>
         </q-item>
-
-        <!-- description -->
-        <!-- <q-item v-if="isEditingAllowed && inEditMode">
+        
+        <!-- Photo Type -->
+        <q-item
+          v-if="textExists('photoType')"
+          multiline
+        >
           <q-item-side>
-            <q-item-tile icon="format_align_left"/>
+            <q-item-tile icon="camera_alt"/>
           </q-item-side>
-          <q-item-main>
-            <q-field>
-              <q-input
-                v-model="editEventObject.description"
-                float-label="Description"
-                inverted-light
-                :color="fieldColor"
-                class="no-shadow"
-              />
-            </q-field>
-
+          <q-item-main class="ced-list-title">
+            {{ eventObject.photoType }}
           </q-item-main>
-        </q-item> -->
+        </q-item>
+        
+        <!-- description -->
         <q-item
           v-if="textExists('description')"
           multiline
         >
           <q-item-side>
-            <q-item-tile icon="format_align_left"/>
+            <q-item-tile icon="notes"/>
           </q-item-side>
           <q-item-main class="ced-list-title">
             {{ eventObject.description }}
+          </q-item-main>
+        </q-item>
+
+        <!-- Notes -->
+        <q-item
+          v-if="textExists('notes')"
+          multiline
+        >
+          <q-item-side>
+            <q-item-tile icon="note"/>
+          </q-item-side>
+          <q-item-main class="ced-list-title">
+            <q-item
+              v-for="(note, index) in eventObject.notes"
+              :key="`note_${index}`"
+            >
+              <q-item-main :label="note.photographerName" :sublabel="note.message" />
+              <q-item-side>
+                <q-item-tile stamp>{{moment(note.created).fromNow()}}</q-item-tile>
+              </q-item-side>
+            </q-item>
           </q-item-main>
         </q-item>
 
@@ -215,6 +232,7 @@
   } from 'quasar'
   import CalendarMixin from './mixins/CalendarMixin'
   const { DateTime } = require('luxon')
+  import * as moment from 'moment'
   export default {
     name: 'CalendarEventDetail',
     props: {
@@ -241,6 +259,11 @@
       fieldColor: {
         type: String,
         default: 'grey-2'
+      }
+    },
+    data () {
+      return {
+        moment: moment
       }
     },
     components: {

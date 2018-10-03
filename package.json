@@ -26,7 +26,8 @@
   ],
   "dependencies": {
     "lodash.has": "^4.5.2",
-    "luxon": "^1.3.3"
+    "luxon": "^1.3.3",
+    "moment": "^2.22.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
