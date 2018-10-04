@@ -146,9 +146,9 @@
                 class="q-pa-xs q-mb-xs"
                 dense
                 square
-                @click.native="$router.push(`/photographers/${photographer.id}`)"
+                @click.native="$router.push(`/photographers/${photographer.photographerId}`)"
               >
-                <t-user-profile-image :userId="photographer.id.toString()" :showName="false"/>
+                <t-user-profile-image :userId="photographer.id" :showName="false"/>
                 {{photographer.displayName}}
               </q-chip>
               <q-icon
