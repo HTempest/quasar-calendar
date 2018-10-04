@@ -26,6 +26,37 @@
         :label="tabLabels.agenda"
         slot="title"
       />
+      
+      <div>
+        <q-field
+          label="From"
+          label-width="12"
+        >
+          <q-datetime
+            clearable
+            format24h
+            color="secondary"
+            class="q-pt-sm"
+            format="ddd Do MMM YYYY"
+            type="date"
+            v-model="filter.from"
+          />
+        </q-field>
+        <q-field
+          label="To"
+          label-width="12"
+        >
+          <q-datetime
+            clearable
+            format24h
+            color="secondary"
+            class="q-pt-sm"
+            format="ddd Do MMM YYYY"
+            type="date"
+            v-model="filter.to"
+          />
+        </q-field>
+      </div>
 
       <q-tab-pane name="tab-month" class="calendar-tab-pane-month">
         <calendar-month
@@ -50,23 +81,6 @@
           :num-days="7"
           :nav-days="7"
           :force-start-of-week="true"
-          :event-ref="eventRef"
-          :full-component-ref="eventRef"
-          :sunday-first-day-of-week="sundayFirstDayOfWeek"
-          :calendar-locale="calendarLocale"
-          :calendar-timezone="calendarTimezone"
-          :prevent-event-detail="preventEventDetail"
-          :allow-editing="allowEditing"
-        />
-      </q-tab-pane>
-      <q-tab-pane name="tab-days-component" class="calendar-tab-pane-week">
-        <calendar-multi-day
-          :ref="'days-' + thisRefName"
-          :start-date="workingDate"
-          :parsed-events="parsed"
-          :num-days="3"
-          :nav-days="1"
-          :force-start-of-week="false"
           :event-ref="eventRef"
           :full-component-ref="eventRef"
           :sunday-first-day-of-week="sundayFirstDayOfWeek"
@@ -145,7 +159,6 @@
           return {
             month: 'Month',
             week: 'Week',
-            threeDay: '3 Day',
             day: 'Day',
             agenda: 'Agenda'
           }
@@ -180,6 +193,7 @@
           byId: {}
         },
         dayRowArray: [],
+        filter: {},
         thisRefName: this.createRandomString()
       }
     },
