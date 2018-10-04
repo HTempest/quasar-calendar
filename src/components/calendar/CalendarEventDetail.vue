@@ -148,14 +148,13 @@
                 square
                 @click.native="$router.push(`/photographers/${photographer.photographerId}`)"
               >
-                <t-user-profile-image :userId="photographer.id" :showName="false"/>
-                {{photographer.displayName}}
+                <t-user-profile-image :userId="photographer.id" :showName="true"/>
               </q-chip>
               <q-icon
                 class="q-ml-xs q-mb-xs"
                 :color="statusColor(photographer.status)"
                 :name="statusIcon(photographer.status)"
-                size="1.2em"
+                size="1.5em"
               />
             </q-item-tile>
           </q-item-main>
@@ -298,7 +297,7 @@
     },
     computed: {
       isUserAccount () {
-        if (typeof this.eventObject.summary === "undefined") return false
+        if (!this.eventObject.hasOwnProperty('summary') || !this.eventObject.summary) return true
         return this.accounts.filter(acc => {
           return acc.name === this.eventObject.summary
         }).length > 0
