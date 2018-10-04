@@ -146,15 +146,15 @@
                 class="q-pa-xs q-mb-xs"
                 dense
                 square
-                @click.native="$router.push(`/photographers/${photographer.id}`)"
+                @click.native="$router.push(`/photographers/${photographer.photographerId}`)"
               >
-                {{photographer.displayName}}
+                <t-user-profile-image :userId="photographer.id" :showName="true"/>
               </q-chip>
               <q-icon
                 class="q-ml-xs q-mb-xs"
                 :color="statusColor(photographer.status)"
                 :name="statusIcon(photographer.status)"
-                size="1.2em"
+                size="1.5em"
               />
             </q-item-tile>
           </q-item-main>
@@ -231,6 +231,7 @@
     QInput
   } from 'quasar'
   import CalendarMixin from './mixins/CalendarMixin'
+  import TUserProfileImage from 'components/TUserProfileImage'
   const { DateTime } = require('luxon')
   // const timeAgo = require('node-time-ago')
   export default {
@@ -273,7 +274,8 @@
       QField,
       QCheckbox,
       QDatetime,
-      QInput
+      QInput,
+      TUserProfileImage
     },
     mixins: [CalendarMixin],
     data () {
@@ -295,7 +297,7 @@
     },
     computed: {
       isUserAccount () {
-        if (typeof this.eventObject.summary === "undefined") return false
+        if (!this.eventObject.hasOwnProperty('summary') || !this.eventObject.summary) return true
         return this.accounts.filter(acc => {
           return acc.name === this.eventObject.summary
         }).length > 0
