@@ -97,7 +97,7 @@
         const photographerId = this.$userProfileData.photographerId
         let colour = 'info'
         if (Array.isArray(attendees) && photographerId) {
-          colour = attendees.some(a => a.id == photographerId) ? 'positive': 'info'
+          colour = attendees.some(a => a.photographerId == photographerId) ? 'positive': 'info'
         }
         return colour
       }
