@@ -11,12 +11,12 @@
       <span v-if="isEmptySlot()" class="calendar-event-summary">
         &nbsp;
       </span>
-      <span v-else class="calendar-event-summary">
+      <span v-else class="calendar-event-summary text-truncate">
+        <q-chip class="" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+          {{ eventObject.attendees.length }}
+        </q-chip>
         {{ eventObject.summary }}
       </span>
-      <q-chip class="float-right" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
-        {{ eventObject.attendees.length }}
-      </q-chip>
     </template>
     <template v-else>
       &nbsp;
