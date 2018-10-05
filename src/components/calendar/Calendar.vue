@@ -1,5 +1,16 @@
 <template>
-  <div class="calendar-test">
+  <div class="calendar-test relative">
+    <span class="absolute-top-right" style="top:69px;z-index:999">
+      <q-btn-toggle
+        v-model="calendarFilterOptions"
+        toggle-color="primary"
+        :options="[
+          {label: 'All', value: 'all'},
+          {label: 'My Diary Entries', value: 'diary'},
+          {label: 'My Bookings', value: 'booking'}
+        ]"
+      />
+    </span>
     <q-tabs class="calendar-tabs" ref="fullCalendarTabs" inverted>
       <q-tab
         name="tab-month"
@@ -26,37 +37,6 @@
         :label="tabLabels.agenda"
         slot="title"
       />
-      
-      <div>
-        <q-field
-          label="From"
-          label-width="12"
-        >
-          <q-datetime
-            clearable
-            format24h
-            color="secondary"
-            class="q-pt-sm"
-            format="ddd Do MMM YYYY"
-            type="date"
-            v-model="filter.from"
-          />
-        </q-field>
-        <q-field
-          label="To"
-          label-width="12"
-        >
-          <q-datetime
-            clearable
-            format24h
-            color="secondary"
-            class="q-pt-sm"
-            format="ddd Do MMM YYYY"
-            type="date"
-            v-model="filter.to"
-          />
-        </q-field>
-      </div>
 
       <q-tab-pane name="tab-month" class="calendar-tab-pane-month">
         <calendar-month
@@ -146,13 +126,15 @@
     QTabs,
     QTab,
     QTabPane,
-    QScrollArea
+    QScrollArea,
+    QBtnToggle
   } from 'quasar'
   import QuantityBubble from './QuantityBubble'
   export default {
     name: 'Calendar',
     mixins: [CalendarParentComponentMixin, CalendarMixin, CalendarEventMixin],
     props: {
+      calUpdate: Function,
       tabLabels: {
         type: Object,
         default: () => {
@@ -194,7 +176,8 @@
         },
         dayRowArray: [],
         filter: {},
-        thisRefName: this.createRandomString()
+        thisRefName: this.createRandomString(),
+        calendarFilterOptions: 'all'
       }
     },
     computed: {},
@@ -240,6 +223,9 @@
       },
       parsedEvents: function () {
         this.getPassedInParsedEvents()
+      },
+      calendarFilterOptions: function (newOption) {
+        this.calUpdate(newOption)
       }
     }
   }
