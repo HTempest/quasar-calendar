@@ -42,8 +42,8 @@
         default: () => {}
       },
       color: {
-        type: String,
-        default: 'primary'
+        type: Array,
+        default: () => [1,87,161]
       },
       textColor: {
         type: String,
@@ -104,9 +104,9 @@
     },
     methods: {
       getEventStyle () {
+        if (this.monthStyle) return
         return {
-          // 'background-color': this.backgroundColor,
-          // 'color': this.textColor
+          'background-color': 'gradient(top, rgba(' + this.color.join(', ') + ') 0%, rgba(255,255,255,0) 100%)'
         }
       },
       getEventClass () {

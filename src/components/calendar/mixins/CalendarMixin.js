@@ -56,19 +56,16 @@ export default {
     getEventColor: function (eventObject, colorName) {
       if (dashHas(eventObject, colorName)) {
         return eventObject[colorName]
-      }
-      else if (dashHas(this, colorName)) {
+      } else if (dashHas(this, colorName)) {
         return this[colorName]
-      }
-      else if (colorName === 'textColor') {
+      } else if (colorName === 'textColor') {
         return 'white'
-      }
-      else {
+      } else {
         return 'primary'
       }
     },
-    addCssColorClasses: function (cssObject, eventObject) {
-      cssObject['bg-' + this.getEventColor(eventObject, 'color')] = true
+    addCssColorClasses: function (cssObject, eventObject, gradient) {
+      cssObject['bg-' + this.getEventColor(eventObject, 'color')] = !gradient
       cssObject['text-' + this.getEventColor(eventObject, 'textColor')] = true
       return cssObject
     },
