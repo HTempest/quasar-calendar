@@ -14,9 +14,9 @@
       <span v-else class="calendar-event-summary">
         {{ eventObject.summary }}
       </span>
-        <q-chip class="float-right" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
-          {{ eventObject.attendees.length }}
-        </q-chip>
+      <q-chip class="float-right" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+        {{ eventObject.attendees.length }}
+      </q-chip>
     </template>
     <template v-else>
       &nbsp;
