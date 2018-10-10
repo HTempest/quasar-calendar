@@ -1,21 +1,22 @@
 <template>
   <div class="calendar-test relative">
-    <span
+    <q-btn-toggle
       :class="{
-        'absolute-top-right': true
+        'absolute-top-right': !$q.screen.lt.lg
       }"
-      style="top:69px;z-index:999"
-    >
-      <q-btn-toggle
-        v-model="calendarFilterOptions"
-        toggle-color="primary"
-        :options="[
-          {label: 'All', value: 'all'},
-          {label: 'My Diary Entries', value: 'diary'},
-          {label: 'My Bookings', value: 'booking'}
-        ]"
-      />
-    </span>
+      :style="{
+        'top': $q.screen.lt.lg ? '0' : '69px',
+        'margin-bottom': $q.screen.lt.lg ? '10px' : 'inherit',
+        'z-index': 999
+      }"
+      v-model="calendarFilterOptions"
+      toggle-color="primary"
+      :options="[
+        {label: 'All', value: 'all'},
+        {label: 'My Diary Entries', value: 'diary'},
+        {label: 'My Bookings', value: 'booking'}
+      ]"
+    />
     <q-tabs class="calendar-tabs" ref="fullCalendarTabs" inverted>
       <q-tab
         name="tab-month"
