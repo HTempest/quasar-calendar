@@ -1,6 +1,11 @@
 <template>
   <div class="calendar-test relative">
-    <span class="absolute-top-right" style="top:69px;z-index:999">
+    <span
+      :class="{
+        'absolute-top-right': true
+      }"
+      style="top:69px;z-index:999"
+    >
       <q-btn-toggle
         v-model="calendarFilterOptions"
         toggle-color="primary"

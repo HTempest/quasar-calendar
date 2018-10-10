@@ -1,11 +1,12 @@
 <template>
-  <div class="calendar-month">
+  <div class="calendar-month" v-touch-swipe.horizontal="swipe">
 
     <!-- calendar header -->
     <calendar-header-nav
       time-period-unit="month"
       :time-period-amount="1"
       :move-time-period-emit="eventRef + ':navMovePeriod'"
+      :calendar-locale="calendarLocale"
     >
       {{ formatDate(workingDate, 'MMMM yyyy') }}
     </calendar-header-nav>
@@ -156,6 +157,22 @@
       }
     },
     methods: {
+      doMoveTimePeriod(timePeriodUnit, timePeriodAmount) {
+        this.$root.$emit(
+          this.eventRef + ':navMovePeriod',
+          {
+            unitType: timePeriodUnit,
+            amount: timePeriodAmount
+          }
+        )
+      },
+      swipe (obj) {
+        if (obj.direction === "right") {
+          this.doMoveTimePeriod("month", -1)
+        } else {
+          this.doMoveTimePeriod("month", 1)
+        }
+      },
       monthGetDateEvents: function (dateObject) {
         const events = this.dateGetEvents(dateObject)
         return [

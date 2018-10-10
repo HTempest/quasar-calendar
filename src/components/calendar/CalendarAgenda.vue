@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-agenda column fit">
+  <div class="calendar-agenda column fit" v-touch-swipe.horizontal="swipe">
     <!-- content block style -->
     <q-infinite-scroll
       v-if="agendaStyle === 'block'"
@@ -202,6 +202,22 @@
       }
     },
     methods: {
+      doMoveTimePeriod(timePeriodUnit, timePeriodAmount) {
+        this.$root.$emit(
+          this.eventRef + ':navMovePeriod',
+          {
+            unitType: timePeriodUnit,
+            amount: timePeriodAmount
+          }
+        )
+      },
+      swipe (obj) {
+        if (obj.direction === "right") {
+          this.doMoveTimePeriod("days", -1)
+        } else {
+          this.doMoveTimePeriod("days", 1)
+        }
+      },
       getDaysForwardDate: function (daysForward) {
         return date.addToDate(this.workingDate, {days: daysForward})
       },

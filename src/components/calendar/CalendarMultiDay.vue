@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-multi-day-component column fit no-wrap">
+  <div class="calendar-multi-day-component column fit no-wrap" v-touch-swipe.horizontal="swipe">
     <!-- week nav -->
     <template v-if="numDays === 1">
       <calendar-header-nav
@@ -189,6 +189,22 @@
       }
     },
     methods: {
+      doMoveTimePeriod(timePeriodUnit, timePeriodAmount) {
+        this.$root.$emit(
+          this.eventRef + ':navMovePeriod',
+          {
+            unitType: timePeriodUnit,
+            amount: timePeriodAmount
+          }
+        )
+      },
+      swipe (obj) {
+        if (obj.direction === "right") {
+          this.doMoveTimePeriod("days", -this.navDays)
+        } else {
+          this.doMoveTimePeriod("days", this.navDays)
+        }
+      },
       getHeaderLabel: function () {
         if (this.forceStartOfWeek) {
           let dateReturn = ''
