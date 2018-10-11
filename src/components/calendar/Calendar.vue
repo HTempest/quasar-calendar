@@ -26,7 +26,7 @@
         slot="title"
       />
       <q-tab
-        v-show="$q.screen.gt.md"
+        v-show="$q.screen.gt.lg"
         name="tab-week-component"
         icon="view_week"
         :label="tabLabels.week"
@@ -112,9 +112,9 @@
       </q-tab-pane>
 
     </q-tabs>
-    <pre>
+    <!-- <pre>
       {{ $q.screen }}
-    </pre>
+    </pre> -->
   </div>
 </template>
 

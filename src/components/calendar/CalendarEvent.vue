@@ -4,19 +4,21 @@
     :style="getEventStyle()"
     @click="handleClick"
   >
-    <template v-if="!eventHasPreviousDay() || (firstDayOfWeek && eventHasPreviousDay())">
+    <template v-if="!eventHasPreviousDay() || (firstDayOfWeek && eventHasPreviousDay())" ref="event">
       <span v-if="!isAllDayEvent() && showTime" class="calendar-event-start-time">
         {{ formatTime(eventObject.start.dateObject) }}
       </span>
-      <span v-if="isEmptySlot() && $q.screen.gt.xs" class="calendar-event-summary">
+      <span v-if="isEmptySlot()" class="calendar-event-summary">
         &nbsp;
       </span>
+      <!-- 150px, 75px -->
       <span v-else class="calendar-event-summary text-truncate">
-        <q-chip v-if="$q.screen.gt.xs" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+        <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor"> <!-- $q.screen.gt.xs elementWidth > 75 -->
           {{ eventObject.attendees.length }}
         </q-chip>
-        <span v-if="$q.screen.gt.md">
+        <span v-show="showSummary"> <!-- $q.screen.gt.md  -->
           {{ eventObject.summary }}
+          {{ elementWidth }}
         </span>
       </span>
     </template>
@@ -81,7 +83,8 @@
     },
     data() {
       return {
-        userPhotographerId: 0
+        userPhotographerId: 0,
+        elementWidth: 0
       }
     },
     components: {
@@ -90,13 +93,23 @@
       QChip
     },
     mixins: [CalendarMixin, CalendarEventMixin],
-    data () {
-      return {}
-    },
     computed: {
+      showPeople () {
+        if (!this.$el.clientWidth) return
+        console.log(this.$el.clientWidth)
+        return this.$el.clientWidth > 75
+      },
+      showSummary () {
+        if (!this.$el.clientWidth) return
+        console.log(this.$el.clientWidth)
+        return this.$el.clientWidth > 150
+      },
       getPhotographerCountColor () {
         const attendees = this.eventObject.attendees
-        if (!this.$userProfileData) return 'error'
+        if (!this.$userProfileData) {
+          console.error("$userProfile not found. This is needed to make the calendar event chips coloured. [Fixed]: This should nolonger occur!")
+          return 'negative'
+        }
         const photographerId = this.$userProfileData.photographerId
         let colour = 'info'
         if (Array.isArray(attendees) && photographerId) {
@@ -124,7 +137,7 @@
             'calendar-event-empty-slot': this.isEmptySlot(),
             'calendar-event-continues-next-week': this.eventContinuesNextWeek(), // for future use
             'calendar-event-continues-from-last-week': this.eventContinuesFromLastWeek(), // for future use
-            'text-center': !this.$q.screen.gt.md
+            'text-center': this.elementWidth < 150
           },
           this.eventObject
         )
@@ -184,6 +197,11 @@
         this.$emit('click', this.eventObject)
         this.triggerEventClick(this.eventObject, this.eventRef)
       }
+    },
+    mounted () {
+      this.$nextTick(() => {
+        this.elementWidth = this.$el.clientWidth
+      })
     }
   }
 </script>
