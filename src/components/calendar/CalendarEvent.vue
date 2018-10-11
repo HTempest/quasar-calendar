@@ -8,14 +8,16 @@
       <span v-if="!isAllDayEvent() && showTime" class="calendar-event-start-time">
         {{ formatTime(eventObject.start.dateObject) }}
       </span>
-      <span v-if="isEmptySlot()" class="calendar-event-summary">
+      <span v-if="isEmptySlot() && $q.screen.gt.xs" class="calendar-event-summary">
         &nbsp;
       </span>
       <span v-else class="calendar-event-summary text-truncate">
-        <q-chip class="" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+        <q-chip v-if="$q.screen.gt.xs" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
           {{ eventObject.attendees.length }}
         </q-chip>
-        {{ eventObject.summary }}
+        <span v-if="$q.screen.gt.md">
+          {{ eventObject.summary }}
+        </span>
       </span>
     </template>
     <template v-else>
@@ -94,6 +96,7 @@
     computed: {
       getPhotographerCountColor () {
         const attendees = this.eventObject.attendees
+        if (!this.$userProfileData) return 'error'
         const photographerId = this.$userProfileData.photographerId
         let colour = 'info'
         if (Array.isArray(attendees) && photographerId) {
@@ -120,7 +123,8 @@
             'calendar-event-has-previous-day': this.eventHasPreviousDay(),
             'calendar-event-empty-slot': this.isEmptySlot(),
             'calendar-event-continues-next-week': this.eventContinuesNextWeek(), // for future use
-            'calendar-event-continues-from-last-week': this.eventContinuesFromLastWeek() // for future use
+            'calendar-event-continues-from-last-week': this.eventContinuesFromLastWeek(), // for future use
+            'text-center': !this.$q.screen.gt.md
           },
           this.eventObject
         )

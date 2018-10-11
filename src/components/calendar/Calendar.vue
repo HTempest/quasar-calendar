@@ -6,7 +6,7 @@
       }"
       :style="{
         'top': $q.screen.lt.lg ? '0' : '69px',
-        'margin-bottom': $q.screen.lt.lg ? '10px' : 'inherit',
+        'margin-bottom': $q.screen.gt.md ? 'inherit' : '10px',
         'z-index': 999
       }"
       v-model="calendarFilterOptions"
@@ -26,6 +26,7 @@
         slot="title"
       />
       <q-tab
+        v-show="$q.screen.gt.md"
         name="tab-week-component"
         icon="view_week"
         :label="tabLabels.week"
@@ -111,6 +112,9 @@
       </q-tab-pane>
 
     </q-tabs>
+    <pre>
+      {{ $q.screen }}
+    </pre>
   </div>
 </template>
 
@@ -248,4 +252,8 @@
       overflow hidden
     .q-tab-pane
       border none
+      // $breakpoint-sm
+      padding 4px 12px
+      @media screen and (max-width: $breakpoint-md)
+        padding 0 6px
 </style>
