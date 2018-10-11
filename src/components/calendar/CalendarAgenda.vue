@@ -202,15 +202,6 @@
       }
     },
     methods: {
-      doMoveTimePeriod(timePeriodUnit, timePeriodAmount) {
-        this.$root.$emit(
-          this.eventRef + ':navMovePeriod',
-          {
-            unitType: timePeriodUnit,
-            amount: timePeriodAmount
-          }
-        )
-      },
       swipe (obj) {
         if (obj.direction === "right") {
           this.doMoveTimePeriod("days", -1)

@@ -170,12 +170,6 @@
       },
       formatTime (startTime) {
         let returnString = this.makeDT(startTime).toLocaleString(DateTime.TIME_SIMPLE)
-        // simplify if AM / PM present
-        if (returnString.includes('M')) {
-          returnString = returnString.replace(':00', '') // remove minutes if = ':00'
-            .replace(' AM', 'a')
-            .replace(' PM', 'p')
-        }
         return returnString
       },
       isAllDayEvent () {
