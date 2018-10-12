@@ -8,7 +8,7 @@
         :move-time-period-emit="eventRef + ':navMovePeriod'"
         :calendar-locale="calendarLocale"
       >
-        {{ formatDate(workingDate, 'EEEE, MMMM d, yyyy')}}
+        {{ formatDate(workingDate, ($q.screen.gt.xs ? 'EEEE, M' : '') + 'MMM d, yyyy')}}
       </calendar-header-nav>
     </template>
     <template v-else>
@@ -207,7 +207,7 @@
             }
             dateReturn += ' - '
           }
-          dateReturn += bookendDates.last.toFormat('MMM yyyy')
+          dateReturn += bookendDates.last.toFormat('MMMM yyyy')
           return dateReturn
         }
         else {

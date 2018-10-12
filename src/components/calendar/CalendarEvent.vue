@@ -218,6 +218,9 @@
     margin 1px 0
     font-size 0.8em
     cursor pointer
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 
   .calendar-event-month
     white-space nowrap
