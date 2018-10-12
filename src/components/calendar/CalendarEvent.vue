@@ -95,19 +95,15 @@
     mixins: [CalendarMixin, CalendarEventMixin],
     computed: {
       showPeople () {
-        if (!this.$el.clientWidth) return
-        console.log(this.$el.clientWidth)
-        return this.$el.clientWidth > 75
+        return this.elementWidth > 75
       },
       showSummary () {
-        if (!this.$el.clientWidth) return
-        console.log(this.$el.clientWidth)
-        return this.$el.clientWidth > 150
+        return this.elementWidth > 150
       },
       getPhotographerCountColor () {
         const attendees = this.eventObject.attendees
         if (!this.$userProfileData) {
-          console.error("$userProfile not found. This is needed to make the calendar event chips coloured. [Fixed]: This should nolonger occur!")
+          console.error("$userProfileData not found. This error will only happen if there was an error with logic elsewhere!")
           return 'negative'
         }
         const photographerId = this.$userProfileData.photographerId
@@ -196,11 +192,15 @@
         this.eventObject.allowEditing = this.allowEditing
         this.$emit('click', this.eventObject)
         this.triggerEventClick(this.eventObject, this.eventRef)
+      },
+      updateWidth () {
+        this.elementWidth = this.$el.clientWidth
       }
     },
     mounted () {
       this.$nextTick(() => {
-        this.elementWidth = this.$el.clientWidth
+        window.addEventListener('resize', this.updateWidth)
+        this.updateWidth()
       })
     }
   }
