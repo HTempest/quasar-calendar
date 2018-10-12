@@ -74,9 +74,9 @@
         :move-time-period-emit="eventRef + ':navMovePeriod'"
         :calendar-locale="calendarLocale"
       >
-        {{ formatDate(workingDate, 'EEE, MMM d')}}
-        -
-        {{ formatDate(makeDT(workingDate).plus({ days: numJumpDays }), 'MMM d')}}
+        {{ formatDate(workingDate, ($q.screen.gt.sm ? 'EEE, ' : '') + 'MMM d')}}
+        {{ ($q.screen.gt.sm ? 'to' : ' - ') }}
+        {{ formatDate(makeDT(workingDate).plus({ days: numJumpDays }), ($q.screen.gt.sm ? 'EEE, ' : '') + 'MMM d')}}
       </calendar-header-nav>
 
       <div
@@ -126,7 +126,9 @@
         </div>
       </div>
     </div>
-
+    <!-- <pre>
+      {{ $q.screen }}
+    </pre> -->
     <calendar-event-detail
       ref="defaultEventDetail"
       v-if="!preventEventDetail"
@@ -312,7 +314,7 @@
         width 100%
       .calendar-agenda-event
         width 100%
-        padding .5em .5em
+        padding .5em 0
         margin-bottom .5em
         text-overflow clip
         border-radius .25em
@@ -327,6 +329,8 @@
         .calendar-agenda-side
           width 6em
           max-width 6em
+          @media screen and (max-width: $breakpoint-md)
+            width 4.5em
           .calendar-agenda-side-date
             font-size 1.1em
             font-weight normal

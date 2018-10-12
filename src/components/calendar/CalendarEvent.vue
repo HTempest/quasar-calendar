@@ -13,12 +13,11 @@
       </span>
       <!-- 150px, 75px -->
       <span v-else class="calendar-event-summary text-truncate">
-        <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor"> <!-- $q.screen.gt.xs elementWidth > 75 -->
+        <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
           {{ eventObject.attendees.length }}
         </q-chip>
-        <span v-show="showSummary"> <!-- $q.screen.gt.md  -->
+        <span v-show="showSummary">
           {{ eventObject.summary }}
-          {{ elementWidth }}
         </span>
       </span>
     </template>

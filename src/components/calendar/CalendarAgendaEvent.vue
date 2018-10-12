@@ -20,7 +20,12 @@
       </template>
     </div>
     <div class="col calendar-agenda-event-summary">
-      {{ eventObject.summary }}
+      <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+        {{ eventObject.attendees.length }}
+      </q-chip>
+      <span v-show="showSummary">
+        {{ eventObject.summary }}
+      </span>
     </div>
   </div>
   <div
@@ -31,7 +36,12 @@
   >
     <!-- block style -->
     <div class="calendar-agenda-event-summary">
-      {{ eventObject.summary }}
+      <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+        {{ eventObject.attendees.length }}
+      </q-chip>
+      <span v-show="showSummary">
+        {{ eventObject.summary }}
+      </span>
     </div>
     <div
       v-if="showTime && !eventObject.start.isAllDay"
@@ -97,9 +107,31 @@
     },
     mixins: [CalendarMixin],
     data () {
-      return {}
+      return {
+        elementWidth: 0
+      }
     },
-    computed: {},
+    computed: {
+      showPeople () {
+        return this.elementWidth > 130
+      },
+      showSummary () {
+        return this.elementWidth > 300
+      },
+      getPhotographerCountColor () {
+        const attendees = this.eventObject.attendees
+        if (!this.$userProfileData) {
+          console.error("$userProfileData not found. This error will only happen if there was an error with logic elsewhere!")
+          return 'negative'
+        }
+        const photographerId = this.$userProfileData.photographerId
+        let colour = 'info'
+        if (Array.isArray(attendees) && photographerId) {
+          colour = attendees.some(a => a.photographerId == photographerId) ? 'positive': 'info'
+        }
+        return colour
+      }
+    },
     methods: {
       getDotClass: function () {
         return this.addCssColorClasses({}, this.eventObject)
@@ -136,21 +168,31 @@
           this.makeDT(startTime).toLocaleString(DateTime.TIME_SIMPLE),
           (this.formatDate(startTime, 'a') === this.formatDate(endTime, 'a'))
         )
-        returnString += ' - '
-        // end time
-        returnString += this.simplifyTimeFormat(
-          this.makeDT(endTime).toLocaleString(DateTime.TIME_SIMPLE),
-          false
-        )
+        if (this.$q.screen.gt.md) {
+          returnString += ' - '
+          // end time
+          returnString += this.simplifyTimeFormat(
+            this.makeDT(endTime).toLocaleString(DateTime.TIME_SIMPLE),
+            false
+          )
+        }
         return returnString
       },
       handleClick: function (e) {
         this.eventObject.allowEditing = this.allowEditing
         this.$emit('click', this.eventObject)
         this.triggerEventClick(this.eventObject, this.eventRef)
+      },
+      updateWidth () {
+        this.elementWidth = this.$el.clientWidth
       }
     },
-    mounted () {}
+    mounted () {
+      this.$nextTick(() => {
+        window.addEventListener('resize', this.updateWidth)
+        this.updateWidth()
+      })
+    }
   }
 </script>
 
@@ -170,6 +212,8 @@
     .calendar-agenda-event-time
       margin-left 1em
       width 160px
+      @media screen and (max-width: $breakpoint-sm)
+        width 60px
     .calendar-agenda-event-dot
       border-radius 12px
       width 12px
