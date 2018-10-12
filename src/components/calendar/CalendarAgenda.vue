@@ -95,8 +95,10 @@
           >
             <div
               class="col-auto calendar-agenda-side"
-              :NOstyle="{ 'width': leftMargin, 'max-width': leftMargin }"
-              :class="{ 'cursor-pointer': calendarDaysAreClickable }"
+              :class="{
+                'cursor-pointer': calendarDaysAreClickable,
+                'rotate-270': !$q.screen.gt.sm
+              }"
               @click="handleDayClick(getDaysForwardDate(daysForward - 1))"
             >
               <div class="calendar-agenda-side-day">
@@ -126,9 +128,6 @@
         </div>
       </div>
     </div>
-    <!-- <pre>
-      {{ $q.screen }}
-    </pre> -->
     <calendar-event-detail
       ref="defaultEventDetail"
       v-if="!preventEventDetail"
@@ -329,11 +328,18 @@
         .calendar-agenda-side
           width 6em
           max-width 6em
-          @media screen and (max-width: $breakpoint-md)
-            width 4.5em
           .calendar-agenda-side-date
             font-size 1.1em
-            font-weight normal
+            font-weight bold
           .calendar-agenda-side-day
             font-size 0.9em
+          @media screen and (max-width: $breakpoint-md)
+            width 4.5em
+          @media screen and (max-width: $breakpoint-sm)
+            text-align right
+            width auto
+            .calendar-agenda-side-date
+            .calendar-agenda-side-day
+              font-size 0.7em
+              font-weight bold
 </style>
