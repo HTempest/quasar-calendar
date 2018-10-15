@@ -13,6 +13,7 @@
 
     <div class="calendar-content">
       <calendar-day-labels
+        :hide-weekends="hideWeekends"
         :number-of-days="7"
         :start-date="workingDate"
         :force-start-of-week="true"
@@ -22,6 +23,7 @@
       <div
         v-for="(thisWeek, index) in weekArray"
         :key="index"
+        v-if="!(hideWeekends && thisWeek.length < 3)"
         :class="{
           'calendar-multi-day': true,
           'row': true,
@@ -32,6 +34,9 @@
         }"
       >
         <div
+          v-for="(thisDay, weekDayIndex) in thisWeek"
+          v-if="!(hideWeekends && isWeekendDay(thisDay.dateObject))"
+          :key="makeDT(thisDay.dateObject).toISODate()"
           :class="{
             'calendar-day': true,
             'calendar-cell': true,
@@ -39,10 +44,10 @@
             'calendar-day-current': isCurrentDate(thisDay.dateObject)
           }"
           :style="{
+            'height': '15.9vh',
+            'width': (100 / (hideWeekends ? 5 : 7)) + '%',
             'min-height': (maxEvents + 2) * 25 + 'px'
           }"
-          v-for="(thisDay, weekDayIndex) in thisWeek"
-          :key="makeDT(thisDay.dateObject).toISODate()"
           @click="handleDayClick(thisDay.dateObject)"
         >
           <div
@@ -147,7 +152,11 @@
     },
     mixins: [CalendarParentComponentMixin, CalendarMixin, CalendarEventMixin],
     props: {
-      fullComponentRef: String
+      fullComponentRef: String,
+      hideWeekends: {
+        type: Boolean,
+        default: false
+      }
     },
     data () {
       return {
@@ -304,8 +313,8 @@
     .calendar-content
       padding 0px
       .calendar-cell
-        width $cellWidth
-        max-width $cellWidth
+        // width $cellWidth // These were not doing anything.
+        // max-width $cellWidth
         padding 0
       .calendar-day-labels
         .calendar-day-label
@@ -318,10 +327,10 @@
           border-bottom none
       .calendar-day
         background-color none
-        height $cellHeight
-        max-height $cellHeight
+        // height $cellHeight
+        // max-height $cellHeight // Overriden anyway
         overflow hidden
-        width $sevenCellWidth
+        // width $sevenCellWidth
         .calendar-day-number
           font-size 0.9em
           height 2em

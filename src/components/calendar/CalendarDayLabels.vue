@@ -2,6 +2,7 @@
   <div class="calendar-day-labels row no-wrap justify-end">
     <div
       v-for="thisDay in weekDateArray"
+      v-if="!(hideWeekends && (formatDate(thisDay, 'EEE') === 'Sat' || formatDate(thisDay, 'EEE') === 'Sun'))"
       :key="formatDate(thisDay, 'EEE')"
       :class="{
         'calendar-day-label': true,
@@ -10,12 +11,13 @@
         'cursor-pointer': calendarDaysAreClickable
       }"
       :style="{
-        'width': cellWidth,
-        'max-width': cellWidth,
+        'width': (100 / (hideWeekends ? 5 : 7)) + '%',
+        'font-weight': (formatDate(thisDay, 'EEE') === 'Sat' || formatDate(thisDay, 'EEE') === 'Sun' ? 'bold' : 'inherit')
       }"
       @click="handleDayClick(thisDay)"
     >
       {{ formatDate(thisDay, 'EEE') }}
+      <!-- showDates = for week view, showing the day date. -->
       <div
         v-if="showDates"
         class="calendar-day-label-date"
@@ -56,6 +58,10 @@
       calendarLocale: {
         type: String,
         default: () => { return DateTime.local().locale }
+      },
+      hideWeekends: {
+        type: Boolean,
+        default: false
       }
     },
     components: {},
