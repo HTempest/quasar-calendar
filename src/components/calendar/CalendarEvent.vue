@@ -45,8 +45,7 @@
         default: () => {}
       },
       color: {
-        type: Array,
-        default: () => [1,87,161]
+        type: String
       },
       textColor: {
         type: String,
@@ -117,7 +116,7 @@
       getEventStyle () {
         if (this.monthStyle) return
         return {
-          'background-color': 'gradient(top, rgba(' + this.color.join(', ') + ') 0%, rgba(255,255,255,0) 100%)'
+          'background': 'linear-gradient(to bottom, rgba(' + this.eventObject.colorGradient + ', 1) 0%,rgba(' + this.eventObject.colorGradient + ', 1) 70%,rgba(' + this.eventObject.colorGradient + ', 0) 100%)'
         }
       },
       getEventClass () {
@@ -134,7 +133,8 @@
             'calendar-event-continues-from-last-week': this.eventContinuesFromLastWeek(), // for future use
             'text-center': this.elementWidth < 150
           },
-          this.eventObject
+          this.eventObject,
+          !this.monthStyle
         )
       },
       isEmptySlot () {

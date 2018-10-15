@@ -63,6 +63,7 @@ export default {
       }
     },
     getEventColor: function (eventObject, colorName) {
+      // Checks if the given event object has the key "color"
       if (dashHas(eventObject, colorName)) {
         return eventObject[colorName]
       } else if (dashHas(this, colorName)) {
@@ -73,8 +74,10 @@ export default {
         return 'primary'
       }
     },
-    addCssColorClasses: function (cssObject, eventObject, gradient) {
-      cssObject['bg-' + this.getEventColor(eventObject, 'color')] = !gradient
+    addCssColorClasses: function (cssObject, eventObject, gradient = true) {
+      if (!gradient) {
+        cssObject['bg-' + this.getEventColor(eventObject, 'color')] = true
+      }
       cssObject['text-' + this.getEventColor(eventObject, 'textColor')] = true
       return cssObject
     },

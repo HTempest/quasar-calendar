@@ -113,7 +113,7 @@
     },
     methods: {
       getDotClass: function () {
-        return this.addCssColorClasses({}, this.eventObject)
+        return this.addCssColorClasses({}, this.eventObject, false)
       },
       getDotEventClass: function () {
         return {

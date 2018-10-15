@@ -86,10 +86,10 @@
                 eventObject.start.isAllDay !== true"
               class="ced-list-subtitle"
             >
-              {{ formatDate(eventObject.start.dateObject, 'TIME_SIMPLE', true)
+              Starts @ {{ formatDate(eventObject.start.dateObject, 'TIME_SIMPLE', true)
               }}
-              -
-              {{ formatDate(eventObject.end.dateObject, 'TIME_SIMPLE', true) }}
+              <!-- -
+              {{ formatDate(eventObject.end.dateObject, 'TIME_SIMPLE', true) }} -->
             </div>
           </q-item-main>
         </q-item>
