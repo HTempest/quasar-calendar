@@ -341,5 +341,4 @@
             .calendar-agenda-side-date
             .calendar-agenda-side-day
               font-size 0.7em
-              font-weight bold
 </style>
