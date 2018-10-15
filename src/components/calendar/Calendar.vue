@@ -1,5 +1,22 @@
 <template>
-  <div class="calendar-test">
+  <div class="calendar-test relative">
+    <q-btn-toggle
+      :class="{
+        'absolute-top-right': !$q.screen.lt.lg
+      }"
+      :style="{
+        'top': $q.screen.lt.lg ? '0' : '69px',
+        'margin-bottom': $q.screen.gt.md ? 'inherit' : '10px',
+        'z-index': 999
+      }"
+      v-model="calendarFilterOptions"
+      toggle-color="primary"
+      :options="[
+        {label: 'All', value: 'all'},
+        {label: 'My Diary Entries', value: 'diary'},
+        {label: 'My Bookings', value: 'booking'}
+      ]"
+    />
     <q-tabs class="calendar-tabs" ref="fullCalendarTabs" inverted>
       <q-tab
         name="tab-month"
@@ -9,6 +26,7 @@
         slot="title"
       />
       <q-tab
+        v-show="$q.screen.gt.lg"
         name="tab-week-component"
         icon="view_week"
         :label="tabLabels.week"
@@ -59,23 +77,6 @@
           :allow-editing="allowEditing"
         />
       </q-tab-pane>
-      <q-tab-pane name="tab-days-component" class="calendar-tab-pane-week">
-        <calendar-multi-day
-          :ref="'days-' + thisRefName"
-          :start-date="workingDate"
-          :parsed-events="parsed"
-          :num-days="3"
-          :nav-days="1"
-          :force-start-of-week="false"
-          :event-ref="eventRef"
-          :full-component-ref="eventRef"
-          :sunday-first-day-of-week="sundayFirstDayOfWeek"
-          :calendar-locale="calendarLocale"
-          :calendar-timezone="calendarTimezone"
-          :prevent-event-detail="preventEventDetail"
-          :allow-editing="allowEditing"
-        />
-      </q-tab-pane>
       <q-tab-pane name="tab-single-day-component" class="calendar-tab-pane-week">
         <calendar-multi-day
           :ref="'day-' + thisRefName"
@@ -111,6 +112,9 @@
       </q-tab-pane>
 
     </q-tabs>
+    <!-- <pre>
+      {{ $q.screen }}
+    </pre> -->
   </div>
 </template>
 
@@ -132,20 +136,21 @@
     QTabs,
     QTab,
     QTabPane,
-    QScrollArea
+    QScrollArea,
+    QBtnToggle
   } from 'quasar'
   import QuantityBubble from './QuantityBubble'
   export default {
     name: 'Calendar',
     mixins: [CalendarParentComponentMixin, CalendarMixin, CalendarEventMixin],
     props: {
+      calUpdate: Function,
       tabLabels: {
         type: Object,
         default: () => {
           return {
             month: 'Month',
             week: 'Week',
-            threeDay: '3 Day',
             day: 'Day',
             agenda: 'Agenda'
           }
@@ -180,7 +185,9 @@
           byId: {}
         },
         dayRowArray: [],
-        thisRefName: this.createRandomString()
+        filter: {},
+        thisRefName: this.createRandomString(),
+        calendarFilterOptions: 'all'
       }
     },
     computed: {},
@@ -226,6 +233,9 @@
       },
       parsedEvents: function () {
         this.getPassedInParsedEvents()
+      },
+      calendarFilterOptions: function (newOption) {
+        this.calUpdate(newOption)
       }
     }
   }
@@ -242,4 +252,8 @@
       overflow hidden
     .q-tab-pane
       border none
+      // $breakpoint-sm
+      padding 4px 12px
+      @media screen and (max-width: $breakpoint-md)
+        padding 0 6px
 </style>

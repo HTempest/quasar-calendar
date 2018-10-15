@@ -1,11 +1,12 @@
 <template>
-  <div class="calendar-month">
+  <div class="calendar-month" v-touch-swipe.horizontal="swipe">
 
     <!-- calendar header -->
     <calendar-header-nav
       time-period-unit="month"
       :time-period-amount="1"
       :move-time-period-emit="eventRef + ':navMovePeriod'"
+      :calendar-locale="calendarLocale"
     >
       {{ formatDate(workingDate, 'MMMM yyyy') }}
     </calendar-header-nav>
@@ -36,6 +37,9 @@
             'calendar-cell': true,
             'calendar-day-weekend': isWeekendDay(thisDay.dateObject),
             'calendar-day-current': isCurrentDate(thisDay.dateObject)
+          }"
+          :style="{
+            'min-height': (maxEvents + 2) * 25 + 'px'
           }"
           v-for="(thisDay, weekDayIndex) in thisWeek"
           :key="makeDT(thisDay.dateObject).toISODate()"
@@ -82,7 +86,12 @@
                 />
               </div>
               <div class="text-center" v-if="monthGetDateEvents(thisDay.dateObject)[1].length > 0">
-                And <span class="event-overflow-qty">{{ monthGetDateEvents(thisDay.dateObject)[1].length }}</span> more <span class="event-overflow-ellipsis">...</span>
+                <span v-if="$q.screen.gt.md">
+                  And <span class="event-overflow-qty">{{ monthGetDateEvents(thisDay.dateObject)[1].length }}</span> more <span class="event-overflow-ellipsis">...</span>
+                </span>
+                <span v-else>
+                  + <span class="event-overflow-qty">{{ monthGetDateEvents(thisDay.dateObject)[1].length }}</span>
+                </span>
               </div>
             </template>
           </div>
@@ -156,6 +165,13 @@
       }
     },
     methods: {
+      swipe (obj) {
+        if (obj.direction === "right") {
+          this.doMoveTimePeriod("month", -1)
+        } else {
+          this.doMoveTimePeriod("month", 1)
+        }
+      },
       monthGetDateEvents: function (dateObject) {
         const events = this.dateGetEvents(dateObject)
         return [
@@ -286,7 +302,7 @@
         font-size 1.25em
         font-weight bold
     .calendar-content
-      padding 4px 12px
+      padding 0px
       .calendar-cell
         width $cellWidth
         max-width $cellWidth
@@ -313,6 +329,7 @@
           vertical-align middle
           padding-top .25em
           padding-left .25em
+          margin-bottom .25em
       .calendar-day-current
         background-color $currentDayBackgroundColor
       .calendar-day-weekend

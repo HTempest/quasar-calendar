@@ -3,6 +3,15 @@ const { DateTime } = require('luxon')
 export default {
   computed: {},
   methods: {
+    doMoveTimePeriod(timePeriodUnit, timePeriodAmount) {
+      this.$root.$emit(
+        this.eventRef + ':navMovePeriod',
+        {
+          unitType: timePeriodUnit,
+          amount: timePeriodAmount
+        }
+      )
+    },
     handleStartChange: function (val, oldVal) {
       this.doUpdate()
     },
@@ -169,7 +178,6 @@ export default {
         timeString = timeString.replace(/[AP]M/i, '')
       }
       return timeString
-        .replace(':00', '')
         .replace(' ', '')
         .toLowerCase()
     },

@@ -4,19 +4,22 @@
     :style="getEventStyle()"
     @click="handleClick"
   >
-    <template v-if="!eventHasPreviousDay() || (firstDayOfWeek && eventHasPreviousDay())">
+    <template v-if="!eventHasPreviousDay() || (firstDayOfWeek && eventHasPreviousDay())" ref="event">
       <span v-if="!isAllDayEvent() && showTime" class="calendar-event-start-time">
         {{ formatTime(eventObject.start.dateObject) }}
       </span>
       <span v-if="isEmptySlot()" class="calendar-event-summary">
         &nbsp;
       </span>
-      <span v-else class="calendar-event-summary">
-        {{ eventObject.summary }}
-      </span>
-        <q-chip class="float-right" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+      <!-- 150px, 75px -->
+      <span v-else class="calendar-event-summary text-truncate">
+        <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
           {{ eventObject.attendees.length }}
         </q-chip>
+        <span v-show="showSummary">
+          {{ eventObject.summary }}
+        </span>
+      </span>
     </template>
     <template v-else>
       &nbsp;
@@ -79,7 +82,8 @@
     },
     data() {
       return {
-        userPhotographerId: 0
+        userPhotographerId: 0,
+        elementWidth: 0
       }
     },
     components: {
@@ -88,12 +92,19 @@
       QChip
     },
     mixins: [CalendarMixin, CalendarEventMixin],
-    data () {
-      return {}
-    },
     computed: {
+      showPeople () {
+        return this.elementWidth > 75
+      },
+      showSummary () {
+        return this.elementWidth > 150
+      },
       getPhotographerCountColor () {
         const attendees = this.eventObject.attendees
+        if (!this.$userProfileData) {
+          console.error("$userProfileData not found. This error will only happen if there was an error with logic elsewhere!")
+          return 'negative'
+        }
         const photographerId = this.$userProfileData.photographerId
         let colour = 'info'
         if (Array.isArray(attendees) && photographerId) {
@@ -120,7 +131,8 @@
             'calendar-event-has-previous-day': this.eventHasPreviousDay(),
             'calendar-event-empty-slot': this.isEmptySlot(),
             'calendar-event-continues-next-week': this.eventContinuesNextWeek(), // for future use
-            'calendar-event-continues-from-last-week': this.eventContinuesFromLastWeek() // for future use
+            'calendar-event-continues-from-last-week': this.eventContinuesFromLastWeek(), // for future use
+            'text-center': this.elementWidth < 150
           },
           this.eventObject
         )
@@ -170,12 +182,6 @@
       },
       formatTime (startTime) {
         let returnString = this.makeDT(startTime).toLocaleString(DateTime.TIME_SIMPLE)
-        // simplify if AM / PM present
-        if (returnString.includes('M')) {
-          returnString = returnString.replace(':00', '') // remove minutes if = ':00'
-            .replace(' AM', 'a')
-            .replace(' PM', 'p')
-        }
         return returnString
       },
       isAllDayEvent () {
@@ -185,7 +191,16 @@
         this.eventObject.allowEditing = this.allowEditing
         this.$emit('click', this.eventObject)
         this.triggerEventClick(this.eventObject, this.eventRef)
+      },
+      updateWidth () {
+        this.elementWidth = this.$el.clientWidth
       }
+    },
+    mounted () {
+      this.$nextTick(() => {
+        window.addEventListener('resize', this.updateWidth)
+        this.updateWidth()
+      })
     }
   }
 </script>
@@ -203,6 +218,9 @@
     margin 1px 0
     font-size 0.8em
     cursor pointer
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 
   .calendar-event-month
     white-space nowrap

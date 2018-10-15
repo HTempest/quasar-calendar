@@ -1,44 +1,30 @@
 <template>
   <div
-    v-if="agendaStyle === 'dot'"
     :class="getDotEventClass()"
     :style="getEventStyle()"
     @mouseup="handleClick"
   >
     <!-- dot style -->
     <div class="col-auto calendar-agenda-event-dot" :class="getDotClass()"></div>
-    <div
-      v-if="showTime"
-      class="col-auto calendar-agenda-event-time"
-    >
-      <template v-if="eventObject.start.isAllDay">
-        All day
-      </template>
-      <template v-else>
-        {{ formatTimeRange(eventObject.start.dateObject,
-        eventObject.end.dateObject) }}
-      </template>
-    </div>
-    <div class="col calendar-agenda-event-summary">
-      {{ eventObject.summary }}
-    </div>
-  </div>
-  <div
-    v-else
-    :class="getEventClass()"
-    :style="getEventStyle()"
-    @mouseup="handleClick"
-  >
-    <!-- block style -->
-    <div class="calendar-agenda-event-summary">
-      {{ eventObject.summary }}
-    </div>
-    <div
-      v-if="showTime && !eventObject.start.isAllDay"
-      class="calendar-agenda-event-time"
-    >
-      {{ formatTimeRange(eventObject.start.dateObject,
-      eventObject.end.dateObject) }}
+    <div>
+      <div>
+        <span
+          v-if="showTime"
+          class="col-auto calendar-agenda-event-time"
+        >
+          {{ formatTimeRange(eventObject.start.dateObject,
+          eventObject.end.dateObject) }}
+        </span>
+        <q-chip v-show="showPeople" dense square :icon="eventObject.attendees.length > 1 ? 'people' : 'person'" :color="getPhotographerCountColor">
+          {{ eventObject.attendees.length }}
+        </q-chip>
+        <span v-show="showSummary" class="calendar-agenda-event-summary">
+          {{ eventObject.summary }}
+        </span>
+      </div>
+      <span v-show="showSummaryWrap" class="calendar-agenda-event-summary">
+        {{ eventObject.summary }}
+      </span>
     </div>
   </div>
 </template>
@@ -97,9 +83,34 @@
     },
     mixins: [CalendarMixin],
     data () {
-      return {}
+      return {
+        elementWidth: 0
+      }
     },
-    computed: {},
+    computed: {
+      showPeople () {
+        return this.elementWidth > 130
+      },
+      showSummary () {
+        return this.elementWidth > 300
+      },
+      showSummaryWrap () {
+        return this.elementWidth <= 300 && this.elementWidth > 210
+      },
+      getPhotographerCountColor () {
+        const attendees = this.eventObject.attendees
+        if (!this.$userProfileData) {
+          console.error("$userProfileData not found. This error will only happen if there was an error with logic elsewhere!")
+          return 'negative'
+        }
+        const photographerId = this.$userProfileData.photographerId
+        let colour = 'info'
+        if (Array.isArray(attendees) && photographerId) {
+          colour = attendees.some(a => a.photographerId == photographerId) ? 'positive': 'info'
+        }
+        return colour
+      }
+    },
     methods: {
       getDotClass: function () {
         return this.addCssColorClasses({}, this.eventObject)
@@ -112,7 +123,6 @@
           'cursor-pointer': true,
           'calendar-agenda-event': true,
           'calendar-agenda-event-dot-style': true,
-          'calendar-agenda-event-allday': this.eventObject.start.isAllDay,
           'calendar-agenda-event-empty-slot': this.eventObject.start.isEmptySlot
         }
       },
@@ -120,7 +130,6 @@
         return this.addCssColorClasses(
           {
             'calendar-agenda-event': true,
-            'calendar-agenda-event-allday': this.eventObject.start.isAllDay,
             'calendar-agenda-event-empty-slot': this.eventObject.start.isEmptySlot
           },
           this.eventObject
@@ -136,21 +145,31 @@
           this.makeDT(startTime).toLocaleString(DateTime.TIME_SIMPLE),
           (this.formatDate(startTime, 'a') === this.formatDate(endTime, 'a'))
         )
-        returnString += ' - '
-        // end time
-        returnString += this.simplifyTimeFormat(
-          this.makeDT(endTime).toLocaleString(DateTime.TIME_SIMPLE),
-          false
-        )
+        if (this.$q.screen.gt.md) {
+          returnString += ' - '
+          // end time
+          returnString += this.simplifyTimeFormat(
+            this.makeDT(endTime).toLocaleString(DateTime.TIME_SIMPLE),
+            false
+          )
+        }
         return returnString
       },
       handleClick: function (e) {
         this.eventObject.allowEditing = this.allowEditing
         this.$emit('click', this.eventObject)
         this.triggerEventClick(this.eventObject, this.eventRef)
+      },
+      updateWidth () {
+        this.elementWidth = this.$el.clientWidth
       }
     },
-    mounted () {}
+    mounted () {
+      this.$nextTick(() => {
+        window.addEventListener('resize', this.updateWidth)
+        this.updateWidth()
+      })
+    }
   }
 </script>
 
@@ -168,8 +187,12 @@
       background-color $whiteHighlightBackgroundColor
       transition background-color 0.3s ease
     .calendar-agenda-event-time
+    .calendar-agenda-event-summary
       margin-left 1em
-      width 160px
+    .calendar-agenda-event-time
+      width 170px
+      @media screen and (max-width: $breakpoint-sm)
+        width 60px
     .calendar-agenda-event-dot
       border-radius 12px
       width 12px

@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-agenda column fit">
+  <div class="calendar-agenda column fit" v-touch-swipe.horizontal="swipe">
     <!-- content block style -->
     <q-infinite-scroll
       v-if="agendaStyle === 'block'"
@@ -74,9 +74,9 @@
         :move-time-period-emit="eventRef + ':navMovePeriod'"
         :calendar-locale="calendarLocale"
       >
-        {{ formatDate(workingDate, 'EEE, MMM d')}}
-        -
-        {{ formatDate(makeDT(workingDate).plus({ days: numJumpDays }), 'MMM d')}}
+        {{ formatDate(workingDate, ($q.screen.gt.sm ? 'EEE, ' : '') + 'MMM d')}}
+        {{ ($q.screen.gt.sm ? 'to' : ' - ') }}
+        {{ formatDate(makeDT(workingDate).plus({ days: numJumpDays }), ($q.screen.gt.sm ? 'EEE, ' : '') + 'MMM d')}}
       </calendar-header-nav>
 
       <div
@@ -95,8 +95,10 @@
           >
             <div
               class="col-auto calendar-agenda-side"
-              :NOstyle="{ 'width': leftMargin, 'max-width': leftMargin }"
-              :class="{ 'cursor-pointer': calendarDaysAreClickable }"
+              :class="{
+                'cursor-pointer': calendarDaysAreClickable,
+                'rotate-270': !$q.screen.gt.sm
+              }"
               @click="handleDayClick(getDaysForwardDate(daysForward - 1))"
             >
               <div class="calendar-agenda-side-day">
@@ -126,7 +128,6 @@
         </div>
       </div>
     </div>
-
     <calendar-event-detail
       ref="defaultEventDetail"
       v-if="!preventEventDetail"
@@ -202,6 +203,13 @@
       }
     },
     methods: {
+      swipe (obj) {
+        if (obj.direction === "right") {
+          this.doMoveTimePeriod("days", -1)
+        } else {
+          this.doMoveTimePeriod("days", 1)
+        }
+      },
       getDaysForwardDate: function (daysForward) {
         return date.addToDate(this.workingDate, {days: daysForward})
       },
@@ -305,7 +313,7 @@
         width 100%
       .calendar-agenda-event
         width 100%
-        padding .5em .5em
+        padding .5em 0
         margin-bottom .5em
         text-overflow clip
         border-radius .25em
@@ -322,7 +330,15 @@
           max-width 6em
           .calendar-agenda-side-date
             font-size 1.1em
-            font-weight normal
+            font-weight bold
           .calendar-agenda-side-day
             font-size 0.9em
+          @media screen and (max-width: $breakpoint-md)
+            width 4.5em
+          @media screen and (max-width: $breakpoint-sm)
+            text-align right
+            width auto
+            .calendar-agenda-side-date
+            .calendar-agenda-side-day
+              font-size 0.7em
 </style>
