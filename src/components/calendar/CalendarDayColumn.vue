@@ -5,9 +5,10 @@
       v-for="thisHour in 24"
       :key="thisHour"
       :style="getCellStyle"
-      :id="makeDT(workingDate).toISODate() + '-hour-' + (thisHour - 1)"
+      :id="getDayHourId(eventRef, workingDate, thisHour - 1)"
       @click="hourClick"
     >
+    <!-- :id="makeDT(workingDate).toISODate() + '-hour-' + (thisHour - 1)" -->
       <div class="calendar-day-time-content"></div>
     </div>
 
