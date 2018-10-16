@@ -7,11 +7,12 @@
       :time-period-amount="1"
       :move-time-period-emit="eventRef + ':navMovePeriod'"
       :calendar-locale="calendarLocale"
-      @click="hasWeekendEvents('nav')"
+      :click="hasWeekendEvents"
+      source="month"
     >
       {{ formatDate(workingDate, 'MMMM yyyy') }}
     </calendar-header-nav>
-    {{ hideWeekends }}
+
     <div class="calendar-content">
       <calendar-day-labels
         :hide-weekends="hideWeekends"
@@ -24,7 +25,7 @@
       <div
         v-for="(thisWeek, index) in weekArray"
         :key="index"
-        v-show="!(hasWeekendEvents && hideWeekends && thisWeek.length < 3)"
+        v-show="!(hideWeekends && thisWeek.length < 3)"
         :class="{
           'calendar-multi-day': true,
           'row': true,
@@ -36,7 +37,7 @@
       >
         <div
           v-for="(thisDay, weekDayIndex) in thisWeek"
-          v-show="!(hasWeekendEvents && hideWeekends && isWeekendDay(thisDay.dateObject))"
+          v-show="!(hideWeekends && isWeekendDay(thisDay.dateObject))"
           :key="makeDT(thisDay.dateObject).toISODate()"
           :class="{
             'calendar-day': true,
@@ -173,19 +174,14 @@
     },
     methods: {
       hasWeekendEvents (source) {
-        console.log(source, +new Date())
-        // console.log("this.hideWeekends", this.hideWeekends)
-        // console.log("this.weekArray", this.weekArray)
         let found = false
         for (let week of this.weekArray) {
           let filtered = week.filter(day => day.dayNumber >= 6 && this.hasAnyEvents(day.dateObject))
-          // console.log("filtered", filtered)
           if ((filtered).length > 0) {
             found = true
-            console.log("The weekends for this month have at least 1 event!", filtered)
+            // console.log("The weekends for this month have at least 1 event!", filtered)
           }
         }
-        console.log("Found:", found)
         this.hideWeekends = !found
         return !found
         // console.log("this.hideWeekends", this.hideWeekends)

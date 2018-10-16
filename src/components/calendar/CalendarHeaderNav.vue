@@ -43,7 +43,9 @@
       moveTimePeriodEmit: {
         type: String,
         default: 'calendar:navMovePeriod'
-      }
+      },
+      click: Function,
+      source: String
     },
     components: {
       QBtn
@@ -61,6 +63,9 @@
             amount: timePeriodAmount
           }
         )
+        this.$nextTick(() => {
+          if (this.source === "month") this.click('navClick')
+        })
       }
     },
     mounted () {}
