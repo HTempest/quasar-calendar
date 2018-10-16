@@ -22,10 +22,7 @@ export default {
       if (dateObject instanceof Date) {
         dateObject = DateTime.fromJSDate(dateObject)
       }
-      if (
-        this.calendarLocale &&
-        (!dashHas(dateObject, 'locale') || this.calendarLocale !== dateObject.locale)
-      ) {
+      if (this.calendarLocale && (!dashHas(dateObject, 'locale') || this.calendarLocale !== dateObject.locale)) {
         dateObject = dateObject.setLocale(this.calendarLocale)
       }
       if (adjustTimezone && adjustTimezone !== dateObject.zoneName) {
@@ -84,8 +81,7 @@ export default {
     formatDate: function (dateObject, formatString, usePredefined) {
       if (usePredefined) {
         return this.makeDT(dateObject).toLocaleString(DateTime[formatString])
-      }
-      else {
+      } else {
         return this.makeDT(dateObject).toFormat(formatString)
       }
     },
@@ -103,8 +99,7 @@ export default {
       for (let counter = 1; counter <= 7; counter++) {
         if (adjustForward) {
           checkDate = thisDateObject.plus({ days: counter })
-        }
-        else {
+        } else {
           checkDate = thisDateObject.minus({ days: counter })
         }
         if (checkDate.weekday === weekdayNum) {
@@ -116,18 +111,15 @@ export default {
       if (numberOfDays === undefined) {
         if (this.numberOfDays !== undefined) {
           numberOfDays = this.numberOfDays
-        }
-        else if (this.numDays !== undefined) {
+        } else if (this.numDays !== undefined) {
           numberOfDays = this.numDays
-        }
-        else {
+        } else {
           numberOfDays = 7
         }
       }
       if (this.forceStartOfWeek) {
         this.weekDateArray = this.getForcedWeekDateArray(numberOfDays, sundayFirstDayOfWeek)
-      }
-      else {
+      } else {
         this.weekDateArray = this.getWeekDateArray(numberOfDays)
       }
     },
@@ -140,8 +132,7 @@ export default {
           first: this.dateAdjustWeekday(this.workingDate, -1).minus({days: 1}),
           last: this.dateAdjustWeekday(this.workingDate, numberOfDays).minus({days: 1})
         }
-      }
-      else {
+      } else {
         return {
           first: this.dateAdjustWeekday(this.workingDate, -1),
           last: this.dateAdjustWeekday(this.workingDate, numberOfDays)
@@ -211,8 +202,7 @@ export default {
     getWeekNumber (thisDateObject, useSundayStart) {
       if (useSundayStart) {
         return this.makeDT(thisDateObject).plus({days: 1}).weekNumber
-      }
-      else {
+      } else {
         return this.makeDT(thisDateObject).weekNumber
       }
     },
@@ -255,15 +245,12 @@ export default {
       if (dashHas(eventObj, 'id')) {
         if (typeof eventObj.id === 'number') {
           return eventObj.id.toString()
-        }
-        else if (typeof eventObj.id === 'string') {
+        } else if (typeof eventObj.id === 'string') {
           return eventObj.id
-        }
-        else {
+        } else {
           return '' + eventObj.id
         }
-      }
-      else {
+      } else {
         return 'NOID' + this.createRandomString()
       }
     }

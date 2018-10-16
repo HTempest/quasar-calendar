@@ -340,5 +340,5 @@
             width auto
             .calendar-agenda-side-date
             .calendar-agenda-side-day
-              font-size 0.7em
+              font-size 0.9em
 </style>
