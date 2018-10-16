@@ -8,7 +8,7 @@
       :move-time-period-emit="eventRef + ':navMovePeriod'"
       :calendar-locale="calendarLocale"
       :click="hasWeekendEvents"
-      source="month"
+      :source="source"
     >
       {{ formatDate(workingDate, 'MMMM yyyy') }}
     </calendar-header-nav>
@@ -154,7 +154,8 @@
     },
     mixins: [CalendarParentComponentMixin, CalendarMixin, CalendarEventMixin],
     props: {
-      fullComponentRef: String
+      fullComponentRef: String,
+      filter: String
     },
     data () {
       return {
@@ -164,7 +165,8 @@
         weekArray: [],
         parsed: this.getDefaultParsed(),
         eventDetailEventObject: {},
-        hideWeekends: false
+        hideWeekends: false,
+        source: 'month'
       }
     },
     computed: {
@@ -173,7 +175,8 @@
       }
     },
     methods: {
-      hasWeekendEvents (source) {
+      hasWeekendEvents (source = "") {
+        // console.log(source)
         let found = false
         for (let week of this.weekArray) {
           let filtered = week.filter(day => day.dayNumber >= 6 && this.hasAnyEvents(day.dateObject))
@@ -192,6 +195,9 @@
         } else {
           this.doMoveTimePeriod("month", 1)
         }
+        this.$nextTick(() => {
+          this.hasWeekendEvents('swipe')
+        })
       },
       monthGetDateEvents: function (dateObject) {
         this.hasWeekendEvents('monthGetDateEvents')
@@ -301,6 +307,9 @@
       },
       parsedEvents: function () {
         this.getPassedInParsedEvents()
+      },
+      filter: function () {
+        this.hasWeekendEvents('filter')
       }
     }
   }

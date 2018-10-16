@@ -58,6 +58,7 @@
           :prevent-event-detail="preventEventDetail"
           :allow-editing="allowEditing"
           :max-events="maxEvents"
+          :filter="calendarFilterOptions"
         />
       </q-tab-pane>
       <q-tab-pane name="tab-week-component" class="calendar-tab-pane-week">
@@ -112,9 +113,6 @@
       </q-tab-pane>
 
     </q-tabs>
-    <!-- <pre>
-      {{ $q.screen }}
-    </pre> -->
   </div>
 </template>
 

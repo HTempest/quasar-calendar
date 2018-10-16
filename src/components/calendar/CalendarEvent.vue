@@ -116,7 +116,7 @@
       getEventStyle () {
         if (this.monthStyle) return
         return {
-          'background': 'linear-gradient(to bottom, rgba(' + this.eventObject.colorGradient + ', 1) 0%,rgba(' + this.eventObject.colorGradient + ', 1) 70%,rgba(' + this.eventObject.colorGradient + ', 0) 100%)'
+          'background': 'linear-gradient(to bottom, rgba(' + this.eventObject.colorGradient + ', 1) 0%,rgba(' + this.eventObject.colorGradient + ', 1) 70%,rgba(' + this.eventObject.colorGradient + ', 0) 100%)!important'
         }
       },
       getEventClass () {

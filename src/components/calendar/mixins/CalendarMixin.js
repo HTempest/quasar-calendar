@@ -72,9 +72,9 @@ export default {
       }
     },
     addCssColorClasses: function (cssObject, eventObject, gradient = true) {
-      if (!gradient) {
+      // if (!gradient) {
         cssObject['bg-' + this.getEventColor(eventObject, 'color')] = true
-      }
+      // }
       cssObject['text-' + this.getEventColor(eventObject, 'textColor')] = true
       return cssObject
     },

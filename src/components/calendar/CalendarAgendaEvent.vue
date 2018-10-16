@@ -92,10 +92,10 @@
         return this.elementWidth > 130
       },
       showSummary () {
-        return this.elementWidth > 300
+        return this.elementWidth > 350
       },
       showSummaryWrap () {
-        return this.elementWidth <= 300 && this.elementWidth > 210
+        return this.elementWidth <= 350 && this.elementWidth > 210
       },
       getPhotographerCountColor () {
         const attendees = this.eventObject.attendees
@@ -145,14 +145,14 @@
           this.makeDT(startTime).toLocaleString(DateTime.TIME_SIMPLE),
           (this.formatDate(startTime, 'a') === this.formatDate(endTime, 'a'))
         )
-        if (this.$q.screen.gt.md) {
-          returnString += ' - '
-          // end time
-          returnString += this.simplifyTimeFormat(
-            this.makeDT(endTime).toLocaleString(DateTime.TIME_SIMPLE),
-            false
-          )
-        }
+        // if (this.$q.screen.gt.md) {
+        //   returnString += ' - '
+        //   // end time
+        //   returnString += this.simplifyTimeFormat(
+        //     this.makeDT(endTime).toLocaleString(DateTime.TIME_SIMPLE),
+        //     false
+        //   )
+        // }
         return returnString
       },
       handleClick: function (e) {
@@ -183,6 +183,9 @@
     width 100%
     background-color inherit
     transition background-color 0.3s ease
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     &:hover
       background-color $whiteHighlightBackgroundColor
       transition background-color 0.3s ease

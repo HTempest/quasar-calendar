@@ -170,8 +170,7 @@
       getScrollStyle: function () {
         if (this.scrollStyle.length > 0) {
           return this.scrollStyle
-        }
-        else {
+        } else {
           return {
             'height': this.scrollHeight
           }
@@ -182,8 +181,7 @@
           return {
             'col': true
           }
-        }
-        else {
+        } else {
           return {}
         }
       }
@@ -201,16 +199,15 @@
           let dateReturn = ''
           let bookendDates = this.getForcedWeekBookendDates()
           if (bookendDates.first.month !== bookendDates.last.month) {
-            dateReturn += bookendDates.first.toFormat('MMM')
+            dateReturn += bookendDates.first.toFormat('MMM' + (this.$q.screen.gt.xs ? 'M' : ''))
             if (bookendDates.first.year !== bookendDates.last.year) {
               dateReturn += bookendDates.first.toFormat(' yyyy')
             }
             dateReturn += ' - '
           }
-          dateReturn += bookendDates.last.toFormat('MMMM yyyy')
+          dateReturn += bookendDates.last.toFormat('MMM' + (this.$q.screen.gt.xs ? 'M' : '') + ' yyyy')
           return dateReturn
-        }
-        else {
+        } else {
           return this.makeDT(this.workingDate).toFormat('MMMM yyyy')
         }
       },
