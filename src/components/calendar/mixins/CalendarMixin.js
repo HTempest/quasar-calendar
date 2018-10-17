@@ -3,6 +3,16 @@ const { DateTime } = require('luxon')
 export default {
   computed: {},
   methods: {
+    earliestTime() {
+      let earliest = 24
+      for (let day of this.weekDateArray) {
+        let events = this.dateGetEvents(day)
+        for (let event of events) {
+          if (event.start.dateObject.hour < earliest) earliest = event.start.dateObject.hour
+        }
+      }
+      return earliest < 3 ? 0 : earliest - 2
+    },
     doMoveTimePeriod(timePeriodUnit, timePeriodAmount) {
       this.$root.$emit(
         this.eventRef + ':navMovePeriod',

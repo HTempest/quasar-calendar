@@ -20,7 +20,6 @@
         {{ getHeaderLabel() }}
       </calendar-header-nav>
     </template>
-
     <div v-if="numDays > 1" class="calendar-time-margin">
       <calendar-day-labels
         :number-of-days="numDays"
@@ -162,7 +161,11 @@
         dayRowArray: [],
         parsed: this.getDefaultParsed(),
         thisNavRef: this.createNewNavEventName(),
-        eventDetailEventObject: {}
+        eventDetailEventObject: {},
+        dayDisplayStartHour: {
+          type: Number,
+          default: 7
+        }
       }
     },
     computed: {
@@ -238,6 +241,7 @@
         setScrollPosition(target, offset, duration)
       },
       scrollToFirstDay () {
+        this.dayDisplayStartHour = this.earliestTime()
         let thisId = this.getDayHourId(
           this.eventRef,
           this.weekDateArray[0],

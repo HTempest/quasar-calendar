@@ -40,10 +40,6 @@ export default {
     maxEvents: {
       type: Number,
       default: 5
-    },
-    dayDisplayStartHour: {
-      type: Number,
-      default: 7
     }
   },
   mounted () {}
