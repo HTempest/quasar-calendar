@@ -1,13 +1,15 @@
 <template>
   <div class="calendar-test relative">
-    <q-btn-toggle
+    <!-- <q-btn-toggle
       :class="{
-        'absolute-top-right': !$q.screen.lt.lg
+        'absolute-top-right': !$q.screen.lt.lg,
+        'bg-color-blue-1': true
       }"
       :style="{
-        'top': $q.screen.lt.lg ? '0' : '69px',
-        'margin-bottom': $q.screen.gt.md ? 'inherit' : '10px',
-        'z-index': 999
+        'top': '69px', // $q.screen.lt.lg ? '0' : 
+        'margin-bottom': '10px', // $q.screen.gt.md ? 'inherit' : 
+        'z-index': 999,
+        'position': 'fixed'
       }"
       v-model="calendarFilterOptions"
       toggle-color="primary"
@@ -16,7 +18,7 @@
         {label: 'My Diary Entries', value: 'diary'},
         {label: 'My Bookings', value: 'booking'}
       ]"
-    />
+    /> -->
     <q-tabs class="calendar-tabs" ref="fullCalendarTabs" inverted>
       <q-tab
         name="tab-month"
@@ -241,7 +243,6 @@
 
 <style lang="stylus">
   @import 'calendar.vars.styl'
-
   .calendar-tabs
     .calendar-tab-pane-day,
     .calendar-tab-pane-week

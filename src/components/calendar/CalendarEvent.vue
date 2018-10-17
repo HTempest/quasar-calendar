@@ -107,7 +107,7 @@
         const photographerId = this.$userProfileData.photographerId
         let colour = 'info'
         if (Array.isArray(attendees) && photographerId) {
-          colour = attendees.some(a => a.photographerId == photographerId) ? 'positive': 'info'
+          colour = attendees.some(a => a.photographerId == photographerId) ? 'info' : 'positive'
         }
         return colour
       }
@@ -116,7 +116,7 @@
       getEventStyle () {
         if (this.monthStyle) return
         return {
-          'background': 'linear-gradient(to bottom, rgba(' + this.eventObject.colorGradient + ', 1) 0%,rgba(' + this.eventObject.colorGradient + ', 1) 70%,rgba(' + this.eventObject.colorGradient + ', 0) 100%)!important'
+          'background': 'linear-gradient(to bottom, rgba(' + this.eventObject.colorGradient + ', 1) 0%,rgba(' + this.eventObject.colorGradient + ', 0.8) 50%,rgba(' + this.eventObject.colorGradient + ', 0) 100%)!important'
         }
       },
       getEventClass () {
